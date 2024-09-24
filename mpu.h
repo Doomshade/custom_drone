@@ -1,3 +1,4 @@
+#include "Arduino.h"
 #ifndef _MPU_H
 #define _MPU_H
 
@@ -5,20 +6,27 @@
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
 
-struct mpu_t {
+typedef struct {
   Adafruit_MPU6050 mpu;
+
+  sensors_event_t accel;
+  sensors_event_t gyro;
+  sensors_event_t temp;
+
   bool ready = false;
   bool debug = false;
-};
+  unsigned long last_debug_msg_ms;
+} mpu_t;
 
-void mpu_setup(struct mpu_t *mpu);
-void mpu_debug_enable(struct mpu_t *mpu);
-void mpu_debug_disable(struct mpu_t *mpu);
-void mpu_debug(struct mpu_t *mpu);
-bool mpu_debug_enabled(struct mpu_t *mpu);
-void mpu_gyro_calibrate(struct mpu_t *mpu);
+void mpu_setup(mpu_t *mpu);
+void mpu_read(mpu_t *mpu);
+void mpu_debug_enable(mpu_t *mpu);
+void mpu_debug_disable(mpu_t *mpu);
+void mpu_debug(mpu_t *mpu);
+bool mpu_debug_enabled(mpu_t *mpu);
+void mpu_gyro_calibrate(mpu_t *mpu);
 
-void mpu_setup(struct mpu_t *mpu) {
+void mpu_setup(mpu_t *mpu) {
   if (!mpu->mpu.begin()) {
     FATALLN("Failed to find MPU6050 chip! Make sure the gyro is connected to the STL and STA pins!");
     while (1) delay(50);
@@ -88,56 +96,62 @@ void mpu_setup(struct mpu_t *mpu) {
   }
   DEBUGLN("");
 
+  mpu->last_debug_msg_ms = 0;
   mpu->ready = true;
   INFOLLN("MPU6050 set up");
 }
 
+void mpu_read(mpu_t *mpu) {
+  mpu->mpu.getEvent(&mpu->accel, &mpu->gyro, &mpu->temp);
+}
 
-void mpu_debug_enable(struct mpu_t *mpu) {
+void mpu_debug_enable(mpu_t *mpu) {
   mpu->debug = true;
   DEBUGLLN("MPU debug enabled");
 }
 
 
-void mpu_debug_disable(struct mpu_t *mpu) {
+void mpu_debug_disable(mpu_t *mpu) {
   mpu->debug = false;
   DEBUGLLN("MPU debug disabled");
 }
 
-void mpu_debug(struct mpu_t *mpu) {
-  /* Get new sensor events with the readings */
-  sensors_event_t a, g, temp;
-  mpu->mpu.getEvent(&a, &g, &temp);
-  /* Print out the values */
+void mpu_debug(mpu_t *mpu) {
+  unsigned long dt = millis() - mpu->last_debug_msg_ms;
+  if (dt < MPU_DEBUG_MILLIS) return;
+
+  mpu_read(mpu);
+  
   DEBUG("Acceleration X: ");
-  DEBUGB(a.acceleration.x, 10);
+  DEBUGB(mpu->accel.acceleration.x, 10);
   DEBUG(", Y: ");
-  DEBUGB(a.acceleration.y, 10);
+  DEBUGB(mpu->accel.acceleration.y, 10);
   DEBUG(", Z: ");
-  DEBUGB(a.acceleration.z, 10);
-  DEBUGLN(" m/s^2");
+  DEBUGB(mpu->accel.acceleration.z, 10);
+  DEBUGLN(" (m/s^2)");
 
   DEBUG("Rotation     X: ");
-  DEBUGB(g.gyro.x, 10);
+  DEBUGB(mpu->gyro.gyro.x, 10);
   DEBUG(", Y: ");
-  DEBUGB(g.gyro.y, 10);
+  DEBUGB(mpu->gyro.gyro.y, 10);
   DEBUG(", Z: ");
-  DEBUGB(g.gyro.z, 10);
-  DEBUGLN(" rad/s");
+  DEBUGB(mpu->gyro.gyro.z, 10);
+  DEBUGLN(" (rad/s)");
 
   DEBUG("Temperature: ");
-  DEBUGB(temp.temperature, 10);
-  DEBUGLN(" degC");
+  DEBUGB(mpu->temp.temperature, 10);
+  DEBUGLN(" (°C)");
 
   DEBUGLN("");
-  delay(500);
+
+  mpu->last_debug_msg_ms = millis();
 }
 
-bool mpu_debug_enabled(struct mpu_t *mpu) {
+bool mpu_debug_enabled(mpu_t *mpu) {
   return mpu->debug;
 }
 
-void mpu_gyro_calibrate(struct mpu_t *mpu) {
+void mpu_gyro_calibrate(mpu_t *mpu) {
   ERRORLLN("Gyro calibration not yet implemented");
 }
 

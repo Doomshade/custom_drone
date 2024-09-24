@@ -15,48 +15,48 @@
 #define CLAMP_SPEED_US(var) CLAMP(var, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US)
 #define CLAMP_SPEED_PC(var) CLAMP(var, ESC_IDLE_SPEED_PC, ESC_MAX_SPEED_PC)
 
-enum esc_state_e {
+typedef enum {
   ESC_STATE_NOT_ARMED = 0,
   ESC_STATE_ARMING = 1,
   ESC_STATE_ARMED = 2
-};
+} esc_state_t;
 
-struct esc_t {
-  enum esc_state_e state = ESC_STATE_NOT_ARMED;
+typedef struct {
+  esc_state_t state = ESC_STATE_NOT_ARMED;
   uint8_t motor_enable_mask = ESC_ALL_MOTORS_DISABLED;
-};
+} esc_t;
 
 // Sets up the ESC. ESC uses Timer 1 and 2 and associated pins that produce PWM output.
-void esc_setup(struct esc_t* esc);
+void esc_setup(esc_t* esc);
 // Enables all motors for arming and usage
-void esc_enable_motors(struct esc_t* esc);
+void esc_enable_motors(esc_t* esc);
 // Disables all motors for arming and usage
-void esc_disable_motors(struct esc_t* esc);
+void esc_disable_motors(esc_t* esc);
 // Enables a certain motor, index ranges <0, 3>
-void esc_enable_motor(struct esc_t* esc, uint8_t motor_idx);
+void esc_enable_motor(esc_t* esc, uint8_t motor_idx);
 // Disables a certain motor, index ranges <0, 3>
-void esc_disable_motor(struct esc_t* esc, uint8_t motor_idx);
+void esc_disable_motor(esc_t* esc, uint8_t motor_idx);
 // Enables or disables a motor under a certain index <0, 3> for arming and usage
-void esc_flip_usage_motor(struct esc_t* esc, uint8_t motor_idx);
+void esc_flip_usage_motor(esc_t* esc, uint8_t motor_idx);
 // Returns the motor state, where false = disabled, true = enabled
-bool esc_motor_state(struct esc_t* esc, uint8_t motor_idx);
+bool esc_motor_state(esc_t* esc, uint8_t motor_idx);
 // Arms the ESC
-void esc_arm(struct esc_t* esc);
+void esc_arm(esc_t* esc);
 // Disarms the ESC
-void esc_disarm(struct esc_t* esc);
+void esc_disarm(esc_t* esc);
 // Sets the motor acceleration under a certain index <0, 3>. The speed must be a value <ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US> (microseconds).
 // For further information please read the BlHeli_S manual
-void esc_set_motor_speed_us(struct esc_t* esc, uint8_t motor_idx, uint16_t speed_us);
+void esc_set_motor_speed_us(esc_t* esc, uint8_t motor_idx, uint16_t speed_us);
 // Sets the acceleration for all motors. For further information see esc_set_motor_speed_us
-void esc_set_all_motor_speed_us(struct esc_t* esc, uint16_t speed_us);
+void esc_set_all_motor_speed_us(esc_t* esc, uint16_t speed_us);
 // Sets the motor acceleration % under a certain index <0, 3>. The speed must be a value 0...1.
 // For further information please read the BlHeli_S manual
-void esc_set_motor_speed_pc(struct esc_t* esc, uint8_t motor_idx, float speed_pc);
+void esc_set_motor_speed_pc(esc_t* esc, uint8_t motor_idx, float speed_pc);
 // Sets the acceleration % for all motors. For further information see esc_set_motor_speed_pc
-void esc_set_all_motor_speed_pc(struct esc_t* esc, float speed_pc);
+void esc_set_all_motor_speed_pc(esc_t* esc, float speed_pc);
 // Tests whether the motors work.
 // WARNING: Make sure you don't have propellers on!
-void esc_test_motors(struct esc_t* esc);
+void esc_test_motors(esc_t* esc);
 
 static inline float speed_us_to_speed_pc(uint16_t speed_us) {
   // 1. 700...2300
@@ -98,7 +98,7 @@ static void set_motor_speed_us(uint8_t motor_idx, uint16_t speed_us) {
   if (pin == INVALID_MOTOR_IDX) return;
 
   CLAMP_SPEED_US(speed_us);
-  
+
   DEBUGL("Setting ESC speed to ");
   DEBUGB(speed_us_to_speed_pc(speed_us) * 100.0, DEC);
   DEBUG("% for motor ");
@@ -126,12 +126,7 @@ static inline void set_all_motor_speed_pc(float speed_pc) {
   set_all_motor_speed_us(speed_pc_to_speed_us(speed_pc));
 }
 
-void esc_setup(struct esc_t* esc) {
-  pinMode((uint8_t)ESC_MOTOR_PIN1, OUTPUT);
-  pinMode((uint8_t)ESC_MOTOR_PIN2, OUTPUT);
-  pinMode((uint8_t)ESC_MOTOR_PIN3, OUTPUT);
-  pinMode((uint8_t)ESC_MOTOR_PIN4, OUTPUT);
-
+void old_shit() {
   // Configure Timer1 for high frequency PWM on pins 9 and 10
   TCCR1A = 0;
   TCCR1B = 0;
@@ -153,7 +148,6 @@ void esc_setup(struct esc_t* esc) {
   // Configure Timer2 for high frequency PWM on pins 11 and 3
   TCCR2A = 0;
   TCCR2B = 0;
-
   // Set PWM mode to Fast PWM
   TCCR2A |= (1 << WGM21);
 
@@ -162,93 +156,106 @@ void esc_setup(struct esc_t* esc) {
 
   // Enable PWM on pin 11 (OC2A) and 3 (OC2B)
   TCCR2A |= (1 << COM2A1) | (1 << COM2B1);
-
-  esc_enable_motors(esc);
-  INFOLN("ESC set up");
 }
 
-void esc_set_motor_speed_us(struct esc_t* esc, uint8_t motor_idx, uint16_t speed_us) {
+void esc_setup(esc_t* esc) {
+  pinMode((uint8_t)ESC_MOTOR_PIN1, OUTPUT);
+  pinMode((uint8_t)ESC_MOTOR_PIN2, OUTPUT);
+  pinMode((uint8_t)ESC_MOTOR_PIN3, OUTPUT);
+  pinMode((uint8_t)ESC_MOTOR_PIN4, OUTPUT);
+
+  noInterrupts();
+
+  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM10);
+  TCCR1B = _BV(CS12);
+
+  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
+  TCCR2B = _BV(CS22);
+
+  interrupts();
+  esc_enable_motors(esc);
+  INFOLN("ESC  set up");
+}
+
+void esc_set_motor_speed_us(esc_t* esc, uint8_t motor_idx, uint16_t speed_us) {
   if (!esc || esc->state == ESC_STATE_NOT_ARMED) return;
 
   set_motor_speed_us(motor_idx, speed_us);
 }
 
-void esc_set_all_motor_speed_us(struct esc_t* esc, uint16_t speed_us) {
+void esc_set_all_motor_speed_us(esc_t* esc, uint16_t speed_us) {
   for (uint8_t motor_idx = 0; motor_idx < ESC_MOTOR_COUNT; motor_idx++) {
     esc_set_motor_speed_us(esc, motor_idx, speed_us);
   }
 }
 
-void esc_set_motor_speed_pc(struct esc_t* esc, uint8_t motor_idx, float speed_pc) {
+void esc_set_motor_speed_pc(esc_t* esc, uint8_t motor_idx, float speed_pc) {
   if (!esc || esc->state == ESC_STATE_NOT_ARMED) return;
 
   set_motor_speed_pc(motor_idx, speed_pc);
 }
 
-void esc_set_all_motor_speed_pc(struct esc_t* esc, float speed_pc) {
+void esc_set_all_motor_speed_pc(esc_t* esc, float speed_pc) {
   for (uint8_t motor_idx = 0; motor_idx < ESC_MOTOR_COUNT; motor_idx++) {
     esc_set_motor_speed_pc(esc, motor_idx, speed_pc);
   }
 }
 
-void esc_enable_motors(struct esc_t* esc) {
+void esc_enable_motors(esc_t* esc) {
   esc->motor_enable_mask = ESC_ALL_MOTORS_ENABLED;
 }
 
-void esc_disable_motors(struct esc_t* esc) {
+void esc_disable_motors(esc_t* esc) {
   esc->motor_enable_mask = ESC_ALL_MOTORS_DISABLED;
 }
 
-void esc_enable_motor(struct esc_t* esc, uint8_t motor_idx) {
+void esc_enable_motor(esc_t* esc, uint8_t motor_idx) {
   if (motor_idx >= ESC_MOTOR_COUNT) return;
 
   esc->motor_enable_mask |= (1 << motor_idx);
 }
 
-void esc_disable_motor(struct esc_t* esc, uint8_t motor_idx) {
+void esc_disable_motor(esc_t* esc, uint8_t motor_idx) {
   if (motor_idx >= ESC_MOTOR_COUNT) return;
 
   esc_set_motor_speed_pc(esc, motor_idx, 0.0);
   esc->motor_enable_mask |= (1 << motor_idx);
 }
 
-void esc_flip_usage_motor(struct esc_t* esc, uint8_t motor_idx) {
+void esc_flip_usage_motor(esc_t* esc, uint8_t motor_idx) {
   if (motor_idx >= ESC_MOTOR_COUNT) return;
 
   esc->motor_enable_mask ^= (1 << motor_idx);
 }
 
-void esc_arm(struct esc_t* esc) {
+void esc_arm(esc_t* esc) {
   INFOLLN("Arming ESC");
   esc->state = ESC_STATE_ARMING;
 
-  // Send minimum throttle signal for a few seconds
   esc_set_all_motor_speed_pc(esc, 0.0);
   delay(3000);
 
-
-  // Briefly send maximum throttle signal
   esc_set_all_motor_speed_pc(esc, 1.0);
   delay(100);
 
-  // Return to minimum throttle
   esc_set_all_motor_speed_pc(esc, 0.0);
   delay(2000);
+
+  esc->state = ESC_STATE_ARMED;
   INFOLLN("ESC armed");
 }
 
-void esc_test_motors(struct esc_t* esc) {
-  // Example: Gradually increase speed on all ESCs
-  for (int i = 0; i < 50; i++) {
+void esc_test_motors(esc_t* esc) {
+  const uint8_t max_pc = 30;
+
+  for (int i = 0; i < max_pc; i++) {
     set_all_motor_speed_pc(i / 100.0);
     delay(20);
   }
 
-  // Hold at max speed for a moment
   delay(1000);
 
-  // Gradually decrease speed on all ESCs
-  for (int i = 49; i >= 0; i--) {
+  for (int i = max_pc; i >= 0; i--) {
     set_all_motor_speed_pc(i / 100.0);
     delay(20);
   }

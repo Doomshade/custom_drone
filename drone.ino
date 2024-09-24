@@ -5,18 +5,21 @@
 #include "cmd.h"
 #include "recvr.h"
 
-static struct mpu_t mpu;
-static struct esc_t esc;
-static struct recvr_t recvr;
+static mpu_t mpu;
+static esc_t esc;
+static recvr_t recvr;
 
-static inline void handle_command(struct cmd_t cmd) {
+static inline void handle_command(cmd_t cmd) {
   switch (cmd.cmd) {
     case CMD_ESC_ARM:
       esc_arm(&esc);
       break;
     case CMD_MPU_DEBUG:
-      if (mpu_debug_enabled(&mpu)) mpu_debug_disable(&mpu);
-      else mpu_debug_enable(&mpu);
+      if (mpu_debug_enabled(&mpu)) {
+        mpu_debug_disable(&mpu);
+      } else {
+        mpu_debug_enable(&mpu);
+      }
       break;
     case CMD_MPU_CALIBRATE:
       mpu_gyro_calibrate(&mpu);
@@ -50,8 +53,14 @@ void setup() {
 }
 
 void loop() {
-  struct cmd_t cmd;
+  // Handle user input first
+  cmd_t cmd;
   cmd_parse(&cmd);
   handle_command(cmd);
+
+  // Do a bunch of readings
   recvr_read(&recvr);
+  mpu_read(&mpu);
+
+  // Adjust the motor values
 }

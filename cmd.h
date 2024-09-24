@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "serial.h"
 
-enum cmd_e {
+typedef enum {
   NONE = 0,
   CMD_ESC_ARM,
   CMD_MPU_DEBUG,
@@ -16,19 +16,19 @@ enum cmd_e {
   CMD_MOTOR_DISABLE,
   CMD_MOTOR_TEST,
   CMD_MOTOR_SPEED
-};
+} cmd_type_t;
 
-struct cmd_t {
-  enum cmd_e cmd = NONE;
+typedef struct {
+  cmd_type_t cmd = NONE;
 
   uint8_t motor_idx;
   uint8_t motor_speed;
-};
+} cmd_t;
 
 // Processes input from Serial
-void cmd_parse(struct cmd_t *cmd);
+void cmd_parse(cmd_t *cmd);
 
-void cmd_parse(struct cmd_t *cmd) {
+void cmd_parse(cmd_t *cmd) {
   if (Serial.available() <= 0) {
     cmd->cmd = NONE;
     return;
