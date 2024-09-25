@@ -18,7 +18,7 @@ First of all, create a directory on your computer and clone the project:
 > git clone https://github.com/Doomshade/drone_fcu.git
 ```
 
-If you don't have `[Git](https://git-scm.com/downloads/win) installed you can just download the [ZIP file](https://github.com/Doomshade/drone_fcu/archive/refs/heads/master.zip) instead.
+If you don't have [Git](https://git-scm.com/downloads/win) installed you can just download the [ZIP file](https://github.com/Doomshade/drone_fcu/archive/refs/heads/master.zip) instead.
 
 Then, `cd` into the directory and run `init.bat`:
 
@@ -46,7 +46,7 @@ To run the project, run `run.bat`:
 ```
 
 This script uses default port `COM3` and board `arduino:avr:uno`.
-To configure this simply modify the following variables in the script:
+To configure this simply modify the following variables in the `run.bat` script:
 
 ```
 REM Set variables for the sketch and port
