@@ -1,0 +1,50 @@
+#ifndef _FCU_H
+#define _FCU_H
+
+#include "common.h"
+
+typedef struct {
+  mpu_t *mpu;
+  esc_t *esc;
+  recvr_t *recvr;
+} fcu_t;
+
+void fcu_setup(fcu_t *fcu, mpu_t *mpu, esc_t *esc, recvr_t *recvr);
+void fcu_work_your_ass(fcu_t *fcu);
+
+void fcu_setup(fcu_t *fcu, mpu_t *mpu, esc_t *esc, recvr_t *recvr) {
+  if (!fcu) {
+    FATALLLN("Failed to initialize FCU.");
+    HALT_PROGRAM();
+  }
+
+  if (!mpu) {
+    FATALLLN("Failed to initialize FCU - MPU not found");
+    HALT_PROGRAM();
+  }
+
+  if (!esc) {
+    FATALLLN("Failed to initialize FCU - ESC not found");
+    HALT_PROGRAM();
+  }
+
+  
+  if (!esc) {
+    FATALLLN("Failed to initialize FCU - RECVR not found");
+    HALT_PROGRAM();
+  }
+
+
+  fcu->mpu = mpu;
+  fcu->esc = esc;
+  fcu->recvr = recvr;
+}
+
+void fcu_work_your_ass(fcu_t *fcu) {
+  // Do a bunch of readings
+  recvr_read(fcu->recvr);
+  mpu_update(fcu->mpu);
+}
+
+
+#endif  // _FCU_H

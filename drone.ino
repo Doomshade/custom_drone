@@ -4,10 +4,12 @@
 #include "esc.h"
 #include "cmd.h"
 #include "recvr.h"
+#include "fcu.h"
 
 static mpu_t mpu;
 static esc_t esc;
 static recvr_t recvr;
+static fcu_t fcu;
 
 static inline void handle_command(cmd_t cmd) {
   switch (cmd.cmd) {
@@ -50,6 +52,7 @@ void setup() {
   mpu_setup(&mpu);
   esc_setup(&esc);
   recvr_setup(&recvr);
+  fcu_setup(&fcu, &mpu, &esc, &recvr);
 }
 
 void loop() {
@@ -58,9 +61,6 @@ void loop() {
   cmd_parse(&cmd);
   handle_command(cmd);
 
-  // Do a bunch of readings
-  recvr_read(&recvr);
-  mpu_read(&mpu);
-
-  // Adjust the motor values
+  // Have the FCU work its ass
+  fcu_work_your_ass(&fcu);
 }

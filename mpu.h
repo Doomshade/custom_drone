@@ -19,20 +19,26 @@ typedef struct {
 } mpu_t;
 
 void mpu_setup(mpu_t *mpu);
-void mpu_read(mpu_t *mpu);
+void mpu_update(mpu_t *mpu);
 void mpu_debug_enable(mpu_t *mpu);
 void mpu_debug_disable(mpu_t *mpu);
 void mpu_debug(mpu_t *mpu);
 bool mpu_debug_enabled(mpu_t *mpu);
 void mpu_gyro_calibrate(mpu_t *mpu);
 
-void mpu_setup(mpu_t *mpu) {
-  if (!mpu->mpu.begin()) {
-    FATALLN("Failed to find MPU6050 chip! Make sure the gyro is connected to the STL and STA pins!");
-    while (1) delay(50);
-    return;
+static void mpu_init(mpu_t *mpu) {
+  if (!mpu) {
+    FATALLN("Failed to initialize MPU");
+    HALT_PROGRAM();
   }
 
+  if (!mpu->mpu.begin()) {
+    FATALLN("Failed to find MPU6050 chip. Make sure the MPU is connected to the STL and STA pins!");
+    HALT_PROGRAM();
+  }
+}
+
+static void mpu_init_accel(mpu_t *mpu) {  
   mpu->mpu.setAccelerometerRange(MPU_ACCELEROMETER_RANGE);
   DEBUGL("Accelerometer range set to: ");
   switch (mpu->mpu.getAccelerometerRange()) {
@@ -50,7 +56,9 @@ void mpu_setup(mpu_t *mpu) {
       break;
   }
   DEBUGLN("");
+}
 
+static void mpu_init_gyro(mpu_t *mpu) {
   mpu->mpu.setGyroRange(MPU_GYRO_RANGE);
   DEBUGL("Gyro range set to: ");
   switch (mpu->mpu.getGyroRange()) {
@@ -68,7 +76,9 @@ void mpu_setup(mpu_t *mpu) {
       break;
   }
   DEBUGLN("");
+}
 
+static void mpu_init_filter_bw(mpu_t *mpu) {
   mpu->mpu.setFilterBandwidth(MPU_FILTER_BANDWIDTH);
   DEBUGL("Filter bandwidth set to: ");
   switch (mpu->mpu.getFilterBandwidth()) {
@@ -95,13 +105,20 @@ void mpu_setup(mpu_t *mpu) {
       break;
   }
   DEBUGLN("");
+}
+
+void mpu_setup(mpu_t *mpu) {
+  mpu_init(mpu);
+  mpu_init_accel(mpu);
+  mpu_init_gyro(mpu);
+  mpu_init_filter_bw(mpu);
 
   mpu->last_debug_msg_ms = 0;
   mpu->ready = true;
   INFOLLN("MPU6050 set up");
 }
 
-void mpu_read(mpu_t *mpu) {
+void mpu_update(mpu_t *mpu) {
   mpu->mpu.getEvent(&mpu->accel, &mpu->gyro, &mpu->temp);
 }
 
@@ -119,8 +136,6 @@ void mpu_debug_disable(mpu_t *mpu) {
 void mpu_debug(mpu_t *mpu) {
   unsigned long dt = millis() - mpu->last_debug_msg_ms;
   if (dt < MPU_DEBUG_MILLIS) return;
-
-  mpu_read(mpu);
   
   DEBUG("Acceleration X: ");
   DEBUGB(mpu->accel.acceleration.x, 10);

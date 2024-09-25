@@ -124,7 +124,7 @@
 #define FATALLN(msg) LOGLLN(LEVEL_FATAL, msg)
 #else
 #define FATAL(msg) EMPTY_STMT
-#define FATAL(msg) EMPTY_STMT
+#define FATALL(msg) EMPTY_STMT
 #define FATALLN(msg) EMPTY_STMT
 #endif
 
