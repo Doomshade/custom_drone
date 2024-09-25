@@ -27,15 +27,16 @@
 #define RECVR_CHANNEL_PIN_THROTTLE (A0)
 #define RECVR_CHANNEL_PIN_YAW (A1)
 #define RECVR_CHANNEL_PIN_PITCH (A2)
-#define RECVR_CHANNEL_PIN_IDK (A3)
+#define RECVR_CHANNEL_PIN_ROLL (A3)
 #define RECVR_CHANNEL_PIN_ARM (A3)
+#define RECVR_ARM_THRESHOLD (1400)
 /// -------------------------------------------
 
 /// ESC config
-#define ESC_MOTOR_PIN1 (9)   // D9 on Nano, OC1A
-#define ESC_MOTOR_PIN2 (10)  // D10 on Nano, OC1B
-#define ESC_MOTOR_PIN3 (11)  // D11 on Nano, OC2A
-#define ESC_MOTOR_PIN4 (3)   // D3 on Nano, OC2B
+#define ESC_MOTOR_PIN1 (9)
+#define ESC_MOTOR_PIN2 (10)
+#define ESC_MOTOR_PIN3 (11)
+#define ESC_MOTOR_PIN4 (3)
 #define ESC_IDLE_SPEED_US (1000)
 #define ESC_MAX_SPEED_US (2000)
 /// -------------------------------------------
@@ -45,4 +46,5 @@
 #define MPU_ACCELEROMETER_RANGE MPU6050_RANGE_8_G
 #define MPU_GYRO_RANGE MPU6050_RANGE_500_DEG
 #define MPU_FILTER_BANDWIDTH MPU6050_BAND_5_HZ
+#define MPU_DEBUG_MILLIS (1000)
 #endif  // CONFIG_H
