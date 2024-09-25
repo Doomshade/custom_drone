@@ -14,23 +14,23 @@ void fcu_work_your_ass(fcu_t *fcu);
 
 void fcu_setup(fcu_t *fcu, mpu_t *mpu, esc_t *esc, recvr_t *recvr) {
   if (!fcu) {
-    FATALLLN("Failed to initialize FCU.");
+    FATALLN("Failed to initialize FCU.");
     HALT_PROGRAM();
   }
 
   if (!mpu) {
-    FATALLLN("Failed to initialize FCU - MPU not found");
+    FATALLN("Failed to initialize FCU - MPU not found");
     HALT_PROGRAM();
   }
 
   if (!esc) {
-    FATALLLN("Failed to initialize FCU - ESC not found");
+    FATALLN("Failed to initialize FCU - ESC not found");
     HALT_PROGRAM();
   }
 
   
   if (!esc) {
-    FATALLLN("Failed to initialize FCU - RECVR not found");
+    FATALLN("Failed to initialize FCU - RECVR not found");
     HALT_PROGRAM();
   }
 
