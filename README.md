@@ -8,26 +8,26 @@ is to learn basics about Arduino and how the FCU works in general as it's an int
 ### Prerequisities
 
 - [Arduino IDE](https://www.arduino.cc/en/software) installed in the standard directory (either `C:\Program Files\Arduino IDE` or in `C:\Users\%USER%\AppData\Local\Programs\Arduino IDE`).
-- [Git](https://git-scm.com/downloads/win) (optional)
+- [Git](https://git-scm.com/downloads/win) _(optional)_
 
 ### How to initialize
 
 First of all, create a directory on your computer and clone the project:
 
 ```bat
-git clone https://github.com/Doomshade/drone_fcu.git
+> git clone https://github.com/Doomshade/drone_fcu.git
 ```
 
-If you don't have `git` installed you can just download the ZIP file instead.
+If you don't have `[Git](https://git-scm.com/downloads/win) installed you can just download the [ZIP file](https://github.com/Doomshade/drone_fcu/archive/refs/heads/master.zip) instead.
 
 Then, `cd` into the directory and run `init.bat`:
 
 ```bat
-cd drone_fcu
-init.bat
+> cd drone_fcu
+> init.bat
 ```
 
-This will generate the config from the `config-example.h` file that you may now
+This will generate `config.h` from the `config-example.h` file that you may now
 configure as u like. This prevents accidental override of the config if you ever `git pull --rebase`.
 
 This script will also attempt to install needed dependencies:
@@ -42,7 +42,7 @@ installed `arduino-cli.exe` that comes with the Arduino IDE installation.
 To run the project, run `run.bat`:
 
 ```bat
-run.bat
+> run.bat
 ```
 
 This script uses default port `COM3` and board `arduino:avr:uno`.
