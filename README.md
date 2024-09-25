@@ -7,8 +7,8 @@ is to learn basics about Arduino and how the FCU works in general as it's an int
 
 ### Prerequisities
 
-- Arduino IDE installed in the standard directory (either `C:\Program Files\Arduino IDE` or in `C:\Users\%USER%\AppData\Local\Programs\Arduino IDE`).
-- Git (optional)
+- [Arduino IDE](https://www.arduino.cc/en/software) installed in the standard directory (either `C:\Program Files\Arduino IDE` or in `C:\Users\%USER%\AppData\Local\Programs\Arduino IDE`).
+- [Git](https://git-scm.com/downloads/win) (optional)
 
 ### How to initialize
 
