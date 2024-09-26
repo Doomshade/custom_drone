@@ -134,6 +134,8 @@ void mpu_debug_disable(mpu_t *mpu) {
 }
 
 void mpu_debug(mpu_t *mpu) {
+  if (!mpu || !mpu_debug_enabled(mpu)) return;
+  
   unsigned long dt = millis() - mpu->last_debug_msg_ms;
   if (dt < MPU_DEBUG_MILLIS) return;
   

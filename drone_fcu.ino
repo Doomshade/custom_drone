@@ -61,6 +61,8 @@ void loop() {
   cmd_parse(&cmd);
   handle_command(cmd);
 
+  mpu_debug(&mpu);
+
   // Have the FCU work its ass
   fcu_work_your_ass(&fcu);
 }
