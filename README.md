@@ -11,7 +11,7 @@ is for me _(Doomshade)_ to learn basics about Arduino, and in general how the FC
 - [Arduino IDE](https://www.arduino.cc/en/software) installed in the standard directory (either `C:\Program Files\Arduino IDE` or in `C:\Users\%USER%\AppData\Local\Programs\Arduino IDE`).
 - [Git](https://git-scm.com/downloads/win) _(optional)_
 
-### How to initialize
+### Project initialization
 
 Clone the project:
 
