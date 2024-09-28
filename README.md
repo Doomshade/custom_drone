@@ -1,7 +1,8 @@
 # Drone Flight Control Unit
 
-_Important note: this is a toy project and should not be used in real drones. Its purpose
-is to learn basics about Arduino and how the FCU works in general as it's an interesting topic._
+> [!IMPORTANT]
+> Important note: this is a toy project and should not be used in real drones. Its purpose
+is for _me_ (Doomshade) to learn basics about Arduino, and in general how the FCU works as it's an interesting topic to me.
 
 ## Installation
 
