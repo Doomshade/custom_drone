@@ -9,7 +9,6 @@ typedef enum {
   CMD_ESC_ARM,
   CMD_MPU_DEBUG,
   CMD_MPU_CALIBRATE,
-  CMD_MOTOR_FLIP_ALL,
   CMD_MOTOR_ENABLE_ALL,
   CMD_MOTOR_DISABLE_ALL,
   CMD_MOTOR_ENABLE,
@@ -50,11 +49,6 @@ void cmd_parse(cmd_t *cmd) {
 
   if (input.equalsIgnoreCase("mpu cal")) {
     cmd->cmd = CMD_MPU_CALIBRATE;
-    return;
-  }
-
-  if (input.equals("motor flip")) {
-    cmd->cmd = CMD_MOTOR_FLIP_ALL;
     return;
   }
 

@@ -26,9 +26,6 @@ static inline void handle_command(cmd_t cmd) {
     case CMD_MPU_CALIBRATE:
       mpu_gyro_calibrate(&mpu);
       break;
-    case CMD_MOTOR_FLIP_ALL:
-      ERRORLLN("Command not yet supported");
-      break;
     case CMD_MOTOR_ENABLE_ALL:
       esc_enable_motors(&esc);
       break;
