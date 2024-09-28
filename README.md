@@ -33,7 +33,7 @@ Then, `cd` into the directory and run `init.bat`:
 This will generate `config.h` from the `config-example.h` file that you may now
 configure as u like. This prevents accidental override of the config if you ever `git pull --rebase`.
 
-> ![NOTE]
+> [!NOTE]
 > This script will also attempt to install needed dependencies:
 >
 > - Adafruit MPU6050
