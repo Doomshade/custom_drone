@@ -41,7 +41,7 @@ configure as u like. This prevents accidental override of the config if you ever
 
 ### How to run the project
 
-To run the project, run `run.bat`:
+To run the project you will need your Arduino connected to your computed via USB, and then run `run.bat`:
 
 ```bat
 > run.bat
