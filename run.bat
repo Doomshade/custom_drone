@@ -41,7 +41,7 @@ echo Sketch uploaded successfully.
 
 REM Run the serial monitor
 echo Starting serial monitor. Press Ctrl+C to exit.
-"%ARDUINO_CLI%" monitor -p %PORT%
+"%ARDUINO_CLI%" monitor -p %PORT% -c 115200
 
 endlocal
 
