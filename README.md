@@ -1,8 +1,8 @@
 # Drone Flight Control Unit
 
 > [!IMPORTANT]
-> Important note: this is a toy project and should not be used in real drones. Its purpose
-is for _me_ (Doomshade) to learn basics about Arduino, and in general how the FCU works as it's an interesting topic to me.
+> This is a toy project and should not be used in real drones. Its purpose
+is for me _(Doomshade)_ to learn basics about Arduino, and in general how the FCU works as it's an interesting topic to me.
 
 ## Installation
 
@@ -13,7 +13,7 @@ is for _me_ (Doomshade) to learn basics about Arduino, and in general how the FC
 
 ### How to initialize
 
-First of all, create a directory on your computer and clone the project:
+Clone the project:
 
 ```bat
 > git clone https://github.com/Doomshade/drone_fcu.git
