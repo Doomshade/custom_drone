@@ -20,6 +20,9 @@ First of all, create a directory on your computer and clone the project:
 
 If you don't have [Git](https://git-scm.com/downloads/win) installed you can just download the [ZIP file](https://github.com/Doomshade/drone_fcu/archive/refs/heads/master.zip) instead.
 
+> [!IMPORTANT]
+> Make sure to remove the `-master` suffix from the directory if you downloaded via ZIP file as it must have the same name as the `.ino` file!
+
 Then, `cd` into the directory and run `init.bat`:
 
 ```bat
