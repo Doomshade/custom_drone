@@ -33,9 +33,10 @@ void cmd_parse(cmd_t *cmd) {
     cmd->cmd = NONE;
     return;
   }
-
-  String input = Serial.readStringUntil('\n');
+  
+  String input = Serial.readString();
   input.toLowerCase();
+  input.trim();
 
   if (input.equalsIgnoreCase("esc arm")) {
     cmd->cmd = CMD_ESC_ARM;
