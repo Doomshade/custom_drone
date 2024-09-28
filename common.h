@@ -12,5 +12,6 @@
 #include "serial.h"
 
 #define HALT_PROGRAM() do{while(1) delay(30);} while(0)
+#define HALT_PROGRAM_MSG(msg) FATALLLN(msg); HALT_PROGRAM()
 
 #endif // _COMMON_H

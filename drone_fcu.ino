@@ -47,6 +47,10 @@ static inline void handle_command(cmd_t cmd) {
   }
 }
 
+static inline void debug_components() {
+  mpu_debug(&mpu);
+}
+
 void setup() {
   serial_setup();
   mpu_setup(&mpu);
@@ -61,7 +65,8 @@ void loop() {
   cmd_parse(&cmd);
   handle_command(cmd);
 
-  mpu_debug(&mpu);
+  // Debug the information of components to serial
+  debug_components();
 
   // Have the FCU work its ass
   fcu_work_your_ass(&fcu);

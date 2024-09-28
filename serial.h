@@ -121,11 +121,13 @@
 #if LOG_LEVEL >= LOG_LEVEL_FATAL
 #define FATAL(msg) LOG(msg)
 #define FATALL(msg) LOGL(LEVEL_FATAL, msg)
-#define FATALLN(msg) LOGLLN(LEVEL_FATAL, msg)
+#define FATALLN(msg) LOGLN(msg)
+#define FATALLLN(msg) LOGLLN(LEVEL_FATAL, msg)
 #else
 #define FATAL(msg) EMPTY_STMT
 #define FATALL(msg) EMPTY_STMT
 #define FATALLN(msg) EMPTY_STMT
+#define FATALLLN(msg) EMPTY_STMT
 #endif
 
 

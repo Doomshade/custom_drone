@@ -173,8 +173,7 @@ void esc_setup(esc_t* esc) {
   TCCR2B = _BV(CS22);
 
   interrupts();
-  esc_enable_motors(esc);
-  INFOLN("ESC  set up");
+  INFOLLN("ESC set up");
 }
 
 void esc_set_motor_speed_us(esc_t* esc, uint8_t motor_idx, uint16_t speed_us) {
