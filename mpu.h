@@ -13,6 +13,9 @@ typedef struct {
   sensors_event_t gyro;
   sensors_event_t temp;
 
+  // xyz coords
+  float accel_err[3];
+  float gyro_err[3];
   bool ready = false;
   bool debug = false;
   unsigned long last_debug_msg_ms;
@@ -168,8 +171,39 @@ bool mpu_debug_enabled(mpu_t *mpu) {
   return mpu->debug;
 }
 
-void mpu_gyro_calibrate(mpu_t *mpu) {
-  ERRORLLN("Gyro calibration not yet implemented");
+static inline void calibrate(float* prev_val, float new_val, size_t num_try) {
+  if (num_try == 0) {
+    *prev_val = new_val;
+  } else {
+    *prev_val += (new_val - *prev_val) / num_try;
+  }
 }
+void mpu_gyro_calibrate(mpu_t *mpu) {
+  INFOLLN("Calibrating gyro, this will take a while...");
+
+  float accel_x, accel_y, accel_z;
+  float gyro_x, gyro_y, gyro_z;
+  for(size_t i = 0; i < MPU_CALIBRATION_TRIES; ++i) {
+    mpu_update(mpu);
+
+    calibrate(&accel_x, mpu->accel.acceleration.x, i);
+    calibrate(&accel_y, mpu->accel.acceleration.y, i);
+    calibrate(&accel_z, mpu->accel.acceleration.z, i);
+    calibrate(&gyro_x, mpu->gyro.gyro.x, i);
+    calibrate(&gyro_y, mpu->gyro.gyro.y, i);
+    calibrate(&gyro_z, mpu->gyro.gyro.z, i);
+    
+    delay(100);
+  }
+
+  mpu->accel_err[0] = accel_x;
+  mpu->accel_err[1] = accel_y;
+  mpu->accel_err[2] = accel_z - MPU_GRAVITATIONAL_CONSTANT;
+
+  mpu->gyro_err[0] = gyro_x;
+  mpu->gyro_err[1] = gyro_y;
+  mpu->gyro_err[2] = gyro_z;
+}
+
 
 #endif  // _MPU_H
