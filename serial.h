@@ -33,7 +33,7 @@
 #define LN STMT(Serial.println())
 
 #if LOG_LEVEL != LOG_LEVEL_NONE
-#define LOG(msg) STMT(Serial.print(static_cast<const char*>(msg)))
+#define LOG(msg) STMT(Serial.print(msg))
 #define LOGL(level, msg) \
   LOG(level); \
   LOG(msg)
@@ -69,7 +69,7 @@
 #define DEBUG(msg) LOG(msg)
 #define DEBUGB(msg, base) LOGB(msg, base)
 #define DEBUGL(msg) LOGL(LEVEL_DEBUG, msg)
-#define DEBUGBLN(msg, base) LOGB(msg, base); LN
+#define DEBUGBLN(msg, base) LOGBLN(msg, base)
 #define DEBUGLN(msg) LOGLN(msg)
 #define DEBUGLLN(msg) LOGLLN(LEVEL_DEBUG, msg)
 #else
@@ -82,11 +82,14 @@
 
 #if LOG_LEVEL >= LOG_LEVEL_INFO
 #define INFO(msg) LOG(msg)
+#define INFOB(msg, base) LOGB(msg, base)
 #define INFOL(msg) LOGL(LEVEL_INFO, msg)
+#define INFOBLN(msg, base) LOGBLN(LEVEL_INFO, msg, base)
 #define INFOLN(msg) LOGLN(msg)
 #define INFOLLN(msg) LOGLLN(LEVEL_INFO, msg)
 #else
 #define INFO(msg) EMPTY_STMT
+#define INFOB(msg, base) EMPTY_STMT
 #define INFOL(msg) EMPTY_STMT
 #define INFOLN(msg) EMPTY_STMT
 #define INFOLLN(msg) EMPTY_STMT

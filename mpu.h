@@ -193,7 +193,7 @@ void mpu_gyro_calibrate(mpu_t *mpu) {
     calibrate(&gyro_y, mpu->gyro.gyro.y, i);
     calibrate(&gyro_z, mpu->gyro.gyro.z, i);
     
-    delay(100);
+    delay(200);
   }
 
   mpu->accel_err[0] = accel_x;
@@ -203,7 +203,30 @@ void mpu_gyro_calibrate(mpu_t *mpu) {
   mpu->gyro_err[0] = gyro_x;
   mpu->gyro_err[1] = gyro_y;
   mpu->gyro_err[2] = gyro_z;
-}
 
+  INFOLLN("Calculated errors:");
+  INFOLN("== Acceleration ==");
+  INFO("x: ");
+  INFO(mpu->accel_err[0]);
+  INFOLN(" m/s^2");
+  INFO("y: ");
+  INFO(mpu->accel_err[1]);
+  INFOLN(" m/s^2");
+  INFO("z: ");
+  INFO(mpu->accel_err[2]);
+  INFOLN(" m/s^2");
+
+  INFOLN("");
+  INFOLN("== Gyro ==");
+  INFO("x: ");
+  INFO(mpu->gyro_err[0]);
+  INFOLN(" rad/s");
+  INFO("y: ");
+  INFO(mpu->gyro_err[1]);
+  INFOLN(" rad/s");
+  INFO("z: ");
+  INFO(mpu->gyro_err[2]);
+  INFOLN(" rad/s");
+}
 
 #endif  // _MPU_H
