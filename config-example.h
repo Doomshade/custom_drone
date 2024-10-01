@@ -47,4 +47,18 @@
 #define MPU_GYRO_RANGE MPU6050_RANGE_500_DEG
 #define MPU_FILTER_BANDWIDTH MPU6050_BAND_5_HZ
 #define MPU_DEBUG_MILLIS (1000)
+#define MPU_CALIBRATION_TRIES (5)
+#define MPU_GRAVITATIONAL_CONSTANT (9.8)
+
+// If you have no SD card you will have to bake the
+// error values into the executable via the #defines below.
+// To get the error values run `mpu cal`
+// You will also have to uncomment the following line:
+// #define MPU_USES_BAKED_VALUES
+#define MPU_ERR_ACCEL_X (0.0)
+#define MPU_ERR_ACCEL_Y (0.0)
+#define MPU_ERR_ACCEL_Z (0.0)
+#define MPU_ERR_GYRO_X (0.0)
+#define MPU_ERR_GYRO_Y (0.0)
+#define MPU_ERR_GYRO_Z (9.8)
 #endif  // CONFIG_H

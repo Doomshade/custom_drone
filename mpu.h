@@ -59,6 +59,19 @@ static void mpu_init_accel(mpu_t *mpu) {
       break;
   }
   DEBUGLN("");
+#ifdef MPU_USES_BAKED_VALUES
+  mpu->accel_err[0] = MPU_ERR_ACCEL_X;
+  mpu->accel_err[1] = MPU_ERR_ACCEL_Y;
+  mpu->accel_err[2] = MPU_ERR_ACCEL_Z;
+
+  DEBUGLLN("Using the following accel error values:");
+  DEBUG("x: ");
+  DEBUGLN(mpu->accel_err[0]);
+  DEBUG("y: ");
+  DEBUGLN(mpu->accel_err[1]);
+  DEBUG("z: ")
+  DEBUGLN(mpu->accel_err[2]);
+#endif // MPU_USES_BAKED_VALUES
 }
 
 static void mpu_init_gyro(mpu_t *mpu) {
@@ -79,6 +92,20 @@ static void mpu_init_gyro(mpu_t *mpu) {
       break;
   }
   DEBUGLN("");
+
+#ifdef MPU_USES_BAKED_VALUES
+  mpu->gyro_err[0] = MPU_ERR_GYRO_X;
+  mpu->gyro_err[1] = MPU_ERR_GYRO_Y;
+  mpu->gyro_err[2] = MPU_ERR_GYRO_Z;
+
+  DEBUGLLN("Using the following gyro error values:");
+  DEBUG("x: ");
+  DEBUGLN(mpu->gyro_err[0]);
+  DEBUG("y: ");
+  DEBUGLN(mpu->gyro_err[1]);
+  DEBUG("z: ")
+  DEBUGLN(mpu->gyro_err[2]);
+#endif // MPU_USES_BAKED_VALUES
 }
 
 static void mpu_init_filter_bw(mpu_t *mpu) {
