@@ -53,6 +53,7 @@ static inline void handle_command(cmd_t cmd) {
 
 static inline void debug_components() {
   mpu_debug(&mpu);
+  recvr_debug(&recvr);
 }
 
 void setup() {

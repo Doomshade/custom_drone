@@ -33,7 +33,7 @@ void cmd_parse(cmd_t *cmd) {
     cmd->cmd = NONE;
     return;
   }
-  
+
   String input = Serial.readString();
   input.toLowerCase();
   input.trim();
@@ -53,7 +53,7 @@ void cmd_parse(cmd_t *cmd) {
     return;
   }
 
-    if (input.equalsIgnoreCase("recvr dbg")) {
+  if (input.equalsIgnoreCase("recvr dbg")) {
     cmd->cmd = CMD_RECVR_DEBUG;
     return;
   }
