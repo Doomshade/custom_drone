@@ -35,7 +35,7 @@ void recvr_read(recvr_t *recvr) {
   recvr->yaw = analogRead(RECVR_CHANNEL_PIN_YAW);
   recvr->pitch = analogRead(RECVR_CHANNEL_PIN_PITCH);
   recvr->roll = analogRead(RECVR_CHANNEL_PIN_ROLL);
-  recvr->arm = analogRead(RECVR_CHANNEL_PIN_ARM);
+  recvr->arm = digitalRead(RECVR_CHANNEL_PIN_ARM);
 }
 
 void recvr_debug(recvr_t *recvr) {
