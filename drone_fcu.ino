@@ -6,10 +6,10 @@
 #include "recvr.h"
 #include "fcu.h"
 
-static mpu_t mpu = {};
-static esc_t esc = {};
-static recvr_t recvr = {};
-static fcu_t fcu = {};
+volatile static mpu_t mpu = {};
+volatile static esc_t esc = {};
+volatile static recvr_t recvr = {};
+volatile static fcu_t fcu = {};
 
 static inline void handle_command(cmd_t cmd) {
   switch (cmd.cmd) {
