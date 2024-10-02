@@ -234,25 +234,25 @@ void mpu_gyro_calibrate(mpu_t *mpu) {
   INFOLLN("Calculated errors:");
   INFOLN("== Acceleration ==");
   INFO("x: ");
-  INFO(mpu->accel_err[0]);
+  INFOB(mpu->accel_err[0], 10);
   INFOLN(" m/s^2");
   INFO("y: ");
-  INFO(mpu->accel_err[1]);
+  INFOB(mpu->accel_err[1], 10);
   INFOLN(" m/s^2");
   INFO("z: ");
-  INFO(mpu->accel_err[2]);
+  INFOB(mpu->accel_err[2], 10);
   INFOLN(" m/s^2");
 
   INFOLN("");
   INFOLN("== Gyro ==");
   INFO("x: ");
-  INFO(mpu->gyro_err[0]);
+  INFOB(mpu->gyro_err[0], 10);
   INFOLN(" rad/s");
   INFO("y: ");
-  INFO(mpu->gyro_err[1]);
+  INFOB(mpu->gyro_err[1], 10);
   INFOLN(" rad/s");
   INFO("z: ");
-  INFO(mpu->gyro_err[2]);
+  INFOB(mpu->gyro_err[2], 10);
   INFOLN(" rad/s");
 }
 
