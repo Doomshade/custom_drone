@@ -170,19 +170,19 @@ void mpu_debug(mpu_t *mpu) {
   if (dt < MPU_DEBUG_MILLIS) return;
   
   DEBUG("Acceleration X: ");
-  DEBUGB(mpu->accel.acceleration.x, 10);
+  DEBUGB(mpu->accel.acceleration.x + mpu->accel_err[0], 10);
   DEBUG(", Y: ");
-  DEBUGB(mpu->accel.acceleration.y, 10);
+  DEBUGB(mpu->accel.acceleration.y + mpu->accel_err[1], 10);
   DEBUG(", Z: ");
-  DEBUGB(mpu->accel.acceleration.z, 10);
+  DEBUGB(mpu->accel.acceleration.z + mpu->accel_err[2], 10);
   DEBUGLN(" (m/s^2)");
 
   DEBUG("Rotation     X: ");
-  DEBUGB(mpu->gyro.gyro.x, 10);
+  DEBUGB(mpu->gyro.gyro.x + mpu->gyro_err[0], 10);
   DEBUG(", Y: ");
-  DEBUGB(mpu->gyro.gyro.y, 10);
+  DEBUGB(mpu->gyro.gyro.y + mpu->gyro_err[1], 10);
   DEBUG(", Z: ");
-  DEBUGB(mpu->gyro.gyro.z, 10);
+  DEBUGB(mpu->gyro.gyro.z + mpu->gyro_err[2], 10);
   DEBUGLN(" (rad/s)");
 
   DEBUG("Temperature: ");
