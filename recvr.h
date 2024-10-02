@@ -36,7 +36,6 @@ void recvr_read(recvr_t *recvr) {
   recvr->pitch = pulseIn(RECVR_CHANNEL_PIN_PITCH, HIGH, 30000);
   recvr->roll = pulseIn(RECVR_CHANNEL_PIN_ROLL, HIGH, 30000);
   recvr->arm = pulseIn(RECVR_CHANNEL_PIN_ARM, HIGH, 30000);
-  read
 }
 
 void recvr_debug(recvr_t *recvr) {
