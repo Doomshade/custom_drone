@@ -4,11 +4,11 @@
 #include "common.h"
 
 typedef struct {
-  int throttle;
-  int yaw;
-  int pitch;
-  int roll;
-  int arm;
+  uint16_t throttle;
+  uint16_t yaw;
+  uint16_t pitch;
+  uint16_t roll;
+  uint16_t arm;
 
   bool debug = false;
   unsigned long last_debug_msg_ms;
@@ -31,11 +31,12 @@ void recvr_setup(recvr_t *recvr) {
 }
 
 void recvr_read(recvr_t *recvr) {
-  recvr->throttle = analogRead(RECVR_CHANNEL_PIN_THROTTLE);
-  recvr->yaw = analogRead(RECVR_CHANNEL_PIN_YAW);
-  recvr->pitch = analogRead(RECVR_CHANNEL_PIN_PITCH);
-  recvr->roll = analogRead(RECVR_CHANNEL_PIN_ROLL);
-  recvr->arm = digitalRead(RECVR_CHANNEL_PIN_ARM);
+  recvr->throttle = pulseIn(RECVR_CHANNEL_PIN_THROTTLE, HIGH, 30000);
+  recvr->yaw = pulseIn(RECVR_CHANNEL_PIN_YAW, HIGH, 30000);
+  recvr->pitch = pulseIn(RECVR_CHANNEL_PIN_PITCH, HIGH, 30000);
+  recvr->roll = pulseIn(RECVR_CHANNEL_PIN_ROLL, HIGH, 30000);
+  recvr->arm = pulseIn(RECVR_CHANNEL_PIN_ARM, HIGH, 30000);
+  read
 }
 
 void recvr_debug(recvr_t *recvr) {
