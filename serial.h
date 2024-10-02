@@ -60,7 +60,7 @@
 #define LOGB(msg, base) EMPTY_STMT
 #define LOGLB(level, msg, base) EMPTY_STMT
 #define LOGBLN(msg, base) EMPTY_STMT
-#define LOGLLN(msg) EMPTY_STMT
+#define LOGLLN(level, msg) EMPTY_STMT
 #define LOGLBLN(msg, base) EMPTY_STMT
 #endif
 
