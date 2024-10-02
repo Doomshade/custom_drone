@@ -58,6 +58,9 @@ void recvr_debug(recvr_t *recvr) {
 
   DEBUGL("Arm: ");
   DEBUGLN(recvr->arm);
+  DEBUGLN("");
+
+  recvr->last_debug_msg_ms = millis();
 }
 
 
