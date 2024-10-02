@@ -225,7 +225,7 @@ void mpu_gyro_calibrate(mpu_t *mpu) {
 
   mpu->accel_err[0] = accel_x;
   mpu->accel_err[1] = accel_y;
-  mpu->accel_err[2] = accel_z - MPU_GRAVITATIONAL_CONSTANT;
+  mpu->accel_err[2] = accel_z + MPU_GRAVITATIONAL_CONSTANT;
 
   mpu->gyro_err[0] = gyro_x;
   mpu->gyro_err[1] = gyro_y;
