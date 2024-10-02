@@ -69,7 +69,7 @@ static void mpu_init_accel(mpu_t *mpu) {
   DEBUGLN(mpu->accel_err[0]);
   DEBUG("y: ");
   DEBUGLN(mpu->accel_err[1]);
-  DEBUG("z: ")
+  DEBUG("z: ");
   DEBUGLN(mpu->accel_err[2]);
 #endif // MPU_USES_BAKED_VALUES
 }
