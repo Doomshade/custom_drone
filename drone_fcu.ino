@@ -23,6 +23,13 @@ static inline void handle_command(cmd_t cmd) {
         mpu_debug_enable(&mpu);
       }
       break;
+    case CMD_RECVR_DEBUG:
+      if (recvr_debug_enabled(&recvr)) {
+        recvr_debug_disable(&recvr);
+      } else {
+        recvr_debug_enable(&recvr);
+      }
+      break;
     case CMD_MPU_CALIBRATE:
       mpu_gyro_calibrate(&mpu);
       break;

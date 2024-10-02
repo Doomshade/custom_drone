@@ -9,6 +9,7 @@ typedef enum {
   CMD_ESC_ARM,
   CMD_MPU_DEBUG,
   CMD_MPU_CALIBRATE,
+  CMD_RECVR_DEBUG,
   CMD_MOTOR_ENABLE_ALL,
   CMD_MOTOR_DISABLE_ALL,
   CMD_MOTOR_ENABLE,
@@ -49,6 +50,11 @@ void cmd_parse(cmd_t *cmd) {
 
   if (input.equalsIgnoreCase("mpu cal")) {
     cmd->cmd = CMD_MPU_CALIBRATE;
+    return;
+  }
+
+    if (input.equalsIgnoreCase("recvr dbg")) {
+    cmd->cmd = CMD_MPU_DEBUG;
     return;
   }
 
