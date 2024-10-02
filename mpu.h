@@ -103,7 +103,7 @@ static void mpu_init_gyro(mpu_t *mpu) {
   DEBUGLN(mpu->gyro_err[0]);
   DEBUG("y: ");
   DEBUGLN(mpu->gyro_err[1]);
-  DEBUG("z: ")
+  DEBUG("z: ");
   DEBUGLN(mpu->gyro_err[2]);
 #endif // MPU_USES_BAKED_VALUES
 }
