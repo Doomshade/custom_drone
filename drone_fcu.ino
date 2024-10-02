@@ -4,12 +4,10 @@
 #include "esc.h"
 #include "cmd.h"
 #include "recvr.h"
-#include "fcu.h"
 
-volatile static mpu_t mpu = {};
-volatile static esc_t esc = {};
-volatile static recvr_t recvr = {};
-volatile static fcu_t fcu = {};
+mpu_t mpu;
+esc_t esc;
+recvr_t recvr;
 
 static inline void handle_command(cmd_t cmd) {
   switch (cmd.cmd) {
@@ -51,6 +49,11 @@ static inline void handle_command(cmd_t cmd) {
   }
 }
 
+static inline void update_components() {
+  mpu_update(&mpu);
+  recvr_read(&recvr);
+}
+
 static inline void debug_components() {
   mpu_debug(&mpu);
   recvr_debug(&recvr);
@@ -61,7 +64,7 @@ void setup() {
   mpu_setup(&mpu);
   esc_setup(&esc);
   recvr_setup(&recvr);
-  fcu_setup(&fcu, &mpu, &esc, &recvr);
+  esc_enable_motors(&esc);
 }
 
 void loop() {
@@ -70,9 +73,9 @@ void loop() {
   cmd_parse(&cmd);
   handle_command(cmd);
 
+  // Read values from components
+  update_components();
+
   // Debug the information of components to serial
   debug_components();
-
-  // Have the FCU work its ass
-  fcu_work_your_ass(&fcu);
 }
