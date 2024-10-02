@@ -54,7 +54,7 @@ void cmd_parse(cmd_t *cmd) {
   }
 
     if (input.equalsIgnoreCase("recvr dbg")) {
-    cmd->cmd = CMD_MPU_DEBUG;
+    cmd->cmd = CMD_RECVR_DEBUG;
     return;
   }
 
