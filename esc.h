@@ -108,10 +108,26 @@ static void set_motor_speed_us(uint8_t motor_idx, uint16_t speed_us) {
   DEBUG(" on pin ");
   DEBUGBLN(pin, DEC);
 
+  long speed = map(speed_us, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US, 0, 255);
+
+  switch(pin) {
+    case ESC_MOTOR_PIN1:
+      OCR1A = speed;
+      break;
+    case ESC_MOTOR_PIN2:
+      OCR1B = speed;
+      break;
+    case ESC_MOTOR_PIN3:
+      OCR2B = speed;
+      break;
+    case ESC_MOTOR_PIN4:
+      OCR2A = speed;
+      break;
+  }
   // The PWM pin accepts values 0..255 which maps to the % of duty cycle
   // For example the value 200 maps to (200/255)*100 =~ 78% duty cycle =~ 78% max speed
-  const long pwm_value = map(speed_us, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US, 0, 255);
-  analogWrite(pin, pwm_value);
+  // const long pwm_value = map(speed_us, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US, 0, 255);
+  // analogWrite(pin, pwm_value);
 }
 
 static inline void set_motor_speed_pc(uint8_t motor_idx, float speed_pc) {
@@ -182,6 +198,12 @@ void esc_setup(esc_t* esc) {
   TCCR2B = _BV(CS21);
 
   interrupts();
+
+  OCR1A = 0;
+  OCR1B = 0;
+  OCR2A = 0;
+  OCR2B = 0;
+
   INFOLLN("ESC set up");
 }
 
