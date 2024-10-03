@@ -255,14 +255,14 @@ void esc_test_motors(esc_t* esc) {
   const uint8_t max_pc = 30;
 
   for (int i = 0; i < max_pc; i++) {
-    esc_set_all_motor_speed_pc(i / 100.0);
+    esc_set_all_motor_speed_pc(esc, i / 100.0);
     delay(20);
   }
 
   delay(1000);
 
   for (int i = max_pc; i >= 0; i--) {
-    esc_set_all_motor_speed_pc(i / 100.0);
+    esc_set_all_motor_speed_pc(esc, i / 100.0);
     delay(20);
   }
 

@@ -46,6 +46,9 @@ static inline void handle_command(cmd_t cmd) {
     case CMD_MOTOR_SPEED:
       esc_set_all_motor_speed_pc(&esc, cmd.motor_speed / 100.0);
       break;
+    case CMD_MOTOR_TEST:
+      esc_test_motors(&esc);
+      break;
   }
 }
 
