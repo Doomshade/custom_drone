@@ -169,10 +169,10 @@ void esc_setup(esc_t* esc) {
   noInterrupts();
 
   TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM10);
-  TCCR1B = _BV(CS12);
+  TCCR1B = (TCCR1B & B11111000) | _BV(CS11);
 
   TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+  TCCR2B = (TCCR2B & B11111000) | _BV(CS21);
 
   interrupts();
   INFOLLN("ESC set up");
