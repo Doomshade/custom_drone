@@ -191,11 +191,12 @@ void esc_setup(esc_t* esc) {
   TCCR2B = 0;
   TCNT2 = 0;
 
-  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM10);
-  TCCR1B = _BV(WGM12) | _BV(CS11);
+  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM11) | _BV(WGM10);
+  TCCR1B = _BV(WGM12) | _BV(CS11) | _BV(CS10);
+  ICR1 = 63;
 
   TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS21);
+  TCCR2B = _BV(CS22);
 
   interrupts();
 
