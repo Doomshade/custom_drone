@@ -231,14 +231,19 @@ void esc_arm(esc_t* esc) {
   INFOLLN("Arming ESC");
   esc->state = ESC_STATE_ARMING;
 
-  esc_set_all_motor_speed_pc(esc, 0.0);
+  esc_set_all_motor_speed_pc(esc, 0.00);
   delay(3000);
+  
+  esc_set_all_motor_speed_pc(esc, 0.05);
+  delay(500);
 
-  esc_set_all_motor_speed_pc(esc, 1.0);
-  delay(100);
+  esc_set_all_motor_speed_pc(esc, 0.90);
+  delay(1500);
 
-  esc_set_all_motor_speed_pc(esc, 0.0);
-  delay(2000);
+  esc_set_all_motor_speed_pc(esc, 0.05);
+  delay(1000);
+  
+  esc_set_all_motor_speed_pc(esc, 0.00);
 
   esc->state = ESC_STATE_ARMED;
   INFOLLN("ESC armed");
