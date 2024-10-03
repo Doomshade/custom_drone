@@ -237,24 +237,12 @@ void esc_arm(esc_t* esc) {
   delay(1000);
   
   esc_set_all_motor_speed_pc(esc, 0.05);
-  delay(50);
-
-  esc_set_all_motor_speed_pc(esc, 0.30);
-  delay(50);
-  
-  esc_set_all_motor_speed_pc(esc, 0.60);
-  delay(50);
+  delay(150);
 
   esc_set_all_motor_speed_pc(esc, 0.90);
-  delay(50);
-
-  esc_set_all_motor_speed_pc(esc, 1.00);
   delay(1500);
 
-  esc_set_all_motor_speed_pc(esc, 0.60);
-  delay(50);
-  
-  esc_set_all_motor_speed_pc(esc, 0.20);
+  esc_set_all_motor_speed_pc(esc, 0.05);
   delay(50);
   
   esc_set_all_motor_speed_pc(esc, 0.00);
