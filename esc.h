@@ -198,12 +198,12 @@ void esc_setup(esc_t* esc) {
   TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
   TCCR2B = _BV(CS22);
 
-  interrupts();
-
   OCR1A = 0;
   OCR1B = 0;
   OCR2A = 0;
   OCR2B = 0;
+
+  interrupts();
 
   INFOLLN("ESC set up");
 }
