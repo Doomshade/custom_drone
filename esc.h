@@ -64,7 +64,7 @@ static inline float speed_us_to_speed_pc(uint16_t speed_us) {
   // 2. 0...1600
   speed_us -= ESC_IDLE_SPEED_US;
   // 3. 0...1
-  return (float)speed_us / (ESC_MAX_SPEED_US - ESC_IDLE_SPEED_US);
+  return ((float)speed_us) / (ESC_MAX_SPEED_US - ESC_IDLE_SPEED_US);
 }
 
 static inline uint16_t speed_pc_to_speed_us(float speed_pc) {
@@ -100,8 +100,10 @@ static void set_motor_speed_us(uint8_t motor_idx, uint16_t speed_us) {
   CLAMP_SPEED_US(speed_us);
 
   DEBUGL("Setting ESC speed to ");
-  DEBUGB(speed_us_to_speed_pc(speed_us) * 100.0, DEC);
-  DEBUG("% for motor ");
+  DEBUG(speed_us_to_speed_pc(speed_us) * 100.0);
+  DEBUG("%% (");
+  DEBUG(speed_us);
+  DEBUG(" us) for motor ");
   DEBUGB(motor_idx, DEC);
   DEBUG(" on pin ");
   DEBUGBLN(pin, DEC);
@@ -253,14 +255,14 @@ void esc_test_motors(esc_t* esc) {
   const uint8_t max_pc = 30;
 
   for (int i = 0; i < max_pc; i++) {
-    set_all_motor_speed_pc(i / 100.0);
+    esc_set_all_motor_speed_pc(i / 100.0);
     delay(20);
   }
 
   delay(1000);
 
   for (int i = max_pc; i >= 0; i--) {
-    set_all_motor_speed_pc(i / 100.0);
+    esc_set_all_motor_speed_pc(i / 100.0);
     delay(20);
   }
 
