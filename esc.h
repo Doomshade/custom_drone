@@ -168,11 +168,18 @@ void esc_setup(esc_t* esc) {
 
   noInterrupts();
 
-  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM10);
-  TCCR1B = (TCCR1B & B11111000) | _BV(CS11);
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1 = 0;
+  TCCR2A = 0;
+  TCCR2B = 0;
+  TCNT2 = 0;
 
-  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
-  TCCR2B = (TCCR2B & B11111000) | _BV(CS21);
+  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM10);
+  TCCR1B = _BV(WGM12) | _BV(CS11);
+
+  TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
+  TCCR2B = _BV(CS21);
 
   interrupts();
   INFOLLN("ESC set up");
@@ -180,6 +187,7 @@ void esc_setup(esc_t* esc) {
 
 void esc_set_motor_speed_us(esc_t* esc, uint8_t motor_idx, uint16_t speed_us) {
   if (!esc || esc->state == ESC_STATE_NOT_ARMED) return;
+  if (!esc_motor_state(esc, motor_idx)) return;
 
   set_motor_speed_us(motor_idx, speed_us);
 }
@@ -192,6 +200,7 @@ void esc_set_all_motor_speed_us(esc_t* esc, uint16_t speed_us) {
 
 void esc_set_motor_speed_pc(esc_t* esc, uint8_t motor_idx, float speed_pc) {
   if (!esc || esc->state == ESC_STATE_NOT_ARMED) return;
+  if (!esc_motor_state(esc, motor_idx)) return;
 
   set_motor_speed_pc(motor_idx, speed_pc);
 }
@@ -227,6 +236,12 @@ void esc_flip_usage_motor(esc_t* esc, uint8_t motor_idx) {
   if (motor_idx >= ESC_MOTOR_COUNT) return;
 
   esc->motor_enable_mask ^= (1 << motor_idx);
+}
+
+bool esc_motor_state(esc_t* esc, uint8_t motor_idx) {
+  if (motor_idx >= ESC_MOTOR_COUNT) return false;
+
+  return (esc->motor_enable_mask & (1 << motor_idx)) > 0;
 }
 
 void esc_arm(esc_t* esc) {
