@@ -96,7 +96,7 @@ void cmd_parse(cmd_t *cmd) {
   }
 
   if (input.startsWith("motor s ")) {
-    unsigned long speed = strtoul(input.substring(strlen("s ")).c_str(), nullptr, 10);
+    unsigned long speed = strtoul(input.substring(strlen("motor s ")).c_str(), nullptr, 10);
     speed = max(0, min(speed, 100));
     cmd->cmd = CMD_MOTOR_SPEED;
     cmd->motor_speed = speed;
