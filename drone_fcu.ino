@@ -68,6 +68,7 @@ void setup() {
   mpu_debug_enable(&mpu);
   esc_setup(&esc);
   recvr_setup(&recvr);
+  recvr_debug_enable(&recvr);
   esc_enable_motors(&esc);
 }
 
