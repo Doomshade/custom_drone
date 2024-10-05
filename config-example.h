@@ -28,7 +28,7 @@
 #define RECVR_CHANNEL_PIN_YAW (A1)
 #define RECVR_CHANNEL_PIN_PITCH (A2)
 #define RECVR_CHANNEL_PIN_ROLL (A3)
-#define RECVR_CHANNEL_PIN_ARM (A3)
+#define RECVR_CHANNEL_PIN_ARM (A7)
 #define RECVR_ARM_THRESHOLD (1400)
 /// -------------------------------------------
 
