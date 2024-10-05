@@ -65,6 +65,7 @@ static inline void debug_components() {
 void setup() {
   serial_setup();
   mpu_setup(&mpu);
+  mpu_debug_enable(&mpu);
   esc_setup(&esc);
   recvr_setup(&recvr);
   esc_enable_motors(&esc);

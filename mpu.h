@@ -3,15 +3,16 @@
 #define _MPU_H
 
 #include "common.h"
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
+#include <Wire.h>
+#define MPU_ADDRESS (0x68)  // I2C address of the MPU-6050
+#define X (0)
+#define Y (1)
+#define Z (2)
 
 typedef struct {
-  Adafruit_MPU6050 mpu;
-
-  sensors_event_t accel;
-  sensors_event_t gyro;
-  sensors_event_t temp;
+  int acc_raw[3];
+  int gyro_raw[3];
+  int temp;
 
   // xyz coords
   float accel_err[3];
@@ -31,117 +32,40 @@ void mpu_gyro_calibrate(mpu_t *mpu);
 
 static void mpu_init(mpu_t *mpu) {
   if (!mpu) {
-    FATALLN("Failed to initialize MPU");
+    FATALLLN("Failed to initialize MPU");
     HALT_PROGRAM();
   }
 
-  if (!mpu->mpu.begin()) {
-    FATALLN("Failed to find MPU6050 chip. Make sure the MPU is connected to the STL and STA pins!");
-    HALT_PROGRAM();
-  }
-}
+  Wire.begin();
+  TWBR = 12;
 
-static void mpu_init_accel(mpu_t *mpu) {  
-  mpu->mpu.setAccelerometerRange(MPU_ACCELEROMETER_RANGE);
-  DEBUGL("Accelerometer range set to: ");
-  switch (mpu->mpu.getAccelerometerRange()) {
-    case MPU6050_RANGE_2_G:
-      DEBUG("+-2G");
-      break;
-    case MPU6050_RANGE_4_G:
-      DEBUG("+-4G");
-      break;
-    case MPU6050_RANGE_8_G:
-      DEBUG("+-8G");
-      break;
-    case MPU6050_RANGE_16_G:
-      DEBUG("+-16G");
-      break;
-  }
-  DEBUGLN("");
-#ifdef MPU_USES_BAKED_VALUES
-  mpu->accel_err[0] = MPU_ERR_ACCEL_X;
-  mpu->accel_err[1] = MPU_ERR_ACCEL_Y;
-  mpu->accel_err[2] = MPU_ERR_ACCEL_Z;
+  // Configure power management
+  Wire.beginTransmission(MPU_ADDRESS); // Start communication with MPU
+  Wire.write(0x6B);                    // Request the PWR_MGMT_1 register
+  Wire.write(0x00);                    // Apply the desired configuration to the register
+  Wire.endTransmission();              // End the transmission
 
-  DEBUGLLN("Using the following accel error values:");
-  DEBUG("x: ");
-  DEBUGLN(mpu->accel_err[0]);
-  DEBUG("y: ");
-  DEBUGLN(mpu->accel_err[1]);
-  DEBUG("z: ");
-  DEBUGLN(mpu->accel_err[2]);
-#endif // MPU_USES_BAKED_VALUES
-}
+  // Configure the gyro's sensitivity
+  Wire.beginTransmission(MPU_ADDRESS); // Start communication with MPU
+  Wire.write(0x1B);                    // Request the GYRO_CONFIG register
+  Wire.write(0x08);                    // Apply the desired configuration to the register : ±500°/s
+  Wire.endTransmission();              // End the transmission
+   
+  // Configure the acceleromter's sensitivity
+  Wire.beginTransmission(MPU_ADDRESS); // Start communication with MPU
+  Wire.write(0x1C);                    // Request the ACCEL_CONFIG register
+  Wire.write(0x10);                    // Apply the desired configuration to the register : ±8g
+  Wire.endTransmission();              // End the transmission
 
-static void mpu_init_gyro(mpu_t *mpu) {
-  mpu->mpu.setGyroRange(MPU_GYRO_RANGE);
-  DEBUGL("Gyro range set to: ");
-  switch (mpu->mpu.getGyroRange()) {
-    case MPU6050_RANGE_250_DEG:
-      DEBUG("+- 250 deg/s");
-      break;
-    case MPU6050_RANGE_500_DEG:
-      DEBUG("+- 500 deg/s");
-      break;
-    case MPU6050_RANGE_1000_DEG:
-      DEBUG("+- 1000 deg/s");
-      break;
-    case MPU6050_RANGE_2000_DEG:
-      DEBUG("+- 2000 deg/s");
-      break;
-  }
-  DEBUGLN("");
-
-#ifdef MPU_USES_BAKED_VALUES
-  mpu->gyro_err[0] = MPU_ERR_GYRO_X;
-  mpu->gyro_err[1] = MPU_ERR_GYRO_Y;
-  mpu->gyro_err[2] = MPU_ERR_GYRO_Z;
-
-  DEBUGLLN("Using the following gyro error values:");
-  DEBUG("x: ");
-  DEBUGLN(mpu->gyro_err[0]);
-  DEBUG("y: ");
-  DEBUGLN(mpu->gyro_err[1]);
-  DEBUG("z: ");
-  DEBUGLN(mpu->gyro_err[2]);
-#endif // MPU_USES_BAKED_VALUES
-}
-
-static void mpu_init_filter_bw(mpu_t *mpu) {
-  mpu->mpu.setFilterBandwidth(MPU_FILTER_BANDWIDTH);
-  DEBUGL("Filter bandwidth set to: ");
-  switch (mpu->mpu.getFilterBandwidth()) {
-    case MPU6050_BAND_260_HZ:
-      DEBUG("260 Hz");
-      break;
-    case MPU6050_BAND_184_HZ:
-      DEBUG("184 Hz");
-      break;
-    case MPU6050_BAND_94_HZ:
-      DEBUG("94 Hz");
-      break;
-    case MPU6050_BAND_44_HZ:
-      DEBUG("44 Hz");
-      break;
-    case MPU6050_BAND_21_HZ:
-      DEBUG("21 Hz");
-      break;
-    case MPU6050_BAND_10_HZ:
-      DEBUG("10 Hz");
-      break;
-    case MPU6050_BAND_5_HZ:
-      DEBUG("5 Hz");
-      break;
-  }
-  DEBUGLN("");
+  // Configure low pass filter
+  Wire.beginTransmission(MPU_ADDRESS); // Start communication with MPU
+  Wire.write(0x1A);                    // Request the CONFIG register
+  Wire.write(0x03);                    // Set Digital Low Pass Filter about ~43Hz
+  Wire.endTransmission();              // End the transmission
 }
 
 void mpu_setup(mpu_t *mpu) {
   mpu_init(mpu);
-  mpu_init_accel(mpu);
-  mpu_init_gyro(mpu);
-  mpu_init_filter_bw(mpu);
 
   mpu->last_debug_msg_ms = 0;
   mpu->ready = true;
@@ -149,7 +73,21 @@ void mpu_setup(mpu_t *mpu) {
 }
 
 void mpu_update(mpu_t *mpu) {
-  mpu->mpu.getEvent(&mpu->accel, &mpu->gyro, &mpu->temp);
+  Wire.beginTransmission(MPU_ADDRESS); // Start communicating with the MPU-6050
+  Wire.write(0x3B);                    // Send the requested starting register
+  Wire.endTransmission();              // End the transmission
+  Wire.requestFrom(MPU_ADDRESS,14);    // Request 14 bytes from the MPU-6050
+
+  // Wait until all the bytes are received
+  while(Wire.available() < 14);
+
+  mpu->acc_raw[X]  = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the acc_raw[X] variable
+  mpu->acc_raw[Y]  = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the acc_raw[Y] variable
+  mpu->acc_raw[Z]  = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the acc_raw[Z] variable
+  mpu->temp = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the temperature variable
+  mpu->gyro_raw[X] = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the gyro_raw[X] variable
+  mpu->gyro_raw[Y] = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the gyro_raw[Y] variable
+  mpu->gyro_raw[Z] = Wire.read() << 8 | Wire.read(); // Add the low and high byte to the gyro_raw[Z] variable
 }
 
 void mpu_debug_enable(mpu_t *mpu) {
@@ -170,23 +108,23 @@ void mpu_debug(mpu_t *mpu) {
   if (dt < MPU_DEBUG_MILLIS) return;
   
   DEBUG("Acceleration X: ");
-  DEBUGB(mpu->accel.acceleration.x - mpu->accel_err[0], 10);
+  DEBUG(mpu->acc_raw[X] - mpu->accel_err[X]);
   DEBUG(", Y: ");
-  DEBUGB(mpu->accel.acceleration.y - mpu->accel_err[1], 10);
+  DEBUG(mpu->acc_raw[Y] - mpu->accel_err[Y]);
   DEBUG(", Z: ");
-  DEBUGB(mpu->accel.acceleration.z - mpu->accel_err[2], 10);
+  DEBUG(mpu->acc_raw[Z] - mpu->accel_err[Z]);
   DEBUGLN(" (m/s^2)");
 
   DEBUG("Rotation     X: ");
-  DEBUGB(mpu->gyro.gyro.x - mpu->gyro_err[0], 10);
+  DEBUG(mpu->gyro_raw[X] - mpu->gyro_err[X]);
   DEBUG(", Y: ");
-  DEBUGB(mpu->gyro.gyro.y - mpu->gyro_err[1], 10);
+  DEBUG(mpu->gyro_raw[Y] - mpu->gyro_err[Y]);
   DEBUG(", Z: ");
-  DEBUGB(mpu->gyro.gyro.z - mpu->gyro_err[2], 10);
+  DEBUG(mpu->gyro_raw[Z] - mpu->gyro_err[Z]);
   DEBUGLN(" (rad/s)");
 
   DEBUG("Temperature: ");
-  DEBUGB(mpu->temp.temperature, 10);
+  DEBUG(mpu->temp);
   DEBUGLN(" (°C)");
 
   DEBUGLN("");
@@ -213,12 +151,12 @@ void mpu_gyro_calibrate(mpu_t *mpu) {
   for(size_t i = 0; i < MPU_CALIBRATION_TRIES; ++i) {
     mpu_update(mpu);
 
-    calibrate(&accel_x, mpu->accel.acceleration.x, i);
-    calibrate(&accel_y, mpu->accel.acceleration.y, i);
-    calibrate(&accel_z, mpu->accel.acceleration.z, i);
-    calibrate(&gyro_x, mpu->gyro.gyro.x, i);
-    calibrate(&gyro_y, mpu->gyro.gyro.y, i);
-    calibrate(&gyro_z, mpu->gyro.gyro.z, i);
+    calibrate(&accel_x, mpu->acc_raw[X], i);
+    calibrate(&accel_y, mpu->acc_raw[Y], i);
+    calibrate(&accel_z, mpu->acc_raw[Z], i);
+    calibrate(&gyro_x, mpu->gyro_raw[X], i);
+    calibrate(&gyro_y, mpu->gyro_raw[Y], i);
+    calibrate(&gyro_z, mpu->gyro_raw[Z], i);
     
     delay(200);
   }
