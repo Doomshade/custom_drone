@@ -8,8 +8,7 @@
 mpu_t mpu;
 esc_t esc;
 recvr_t recvr;
-unsigned long lastTime = 0;
-unsigned long currentTime = 0;
+unsigned long last_time = 0;
 
 static inline void handle_command(cmd_t cmd) {
   switch (cmd.cmd) {
@@ -95,18 +94,23 @@ void loop() {
   // Debug the information of components to serial
   debug_components();
   // Measure and print the actual interrupt frequency every second
-  currentTime = millis();
-  if (currentTime - lastTime >= 1000) {
-    noInterrupts();
-    unsigned long count = interrupt_count;
+  unsigned long current_time = millis();
+
+  if (recvr_debug_enabled(&recvr)) {
+    if (current_time - last_time >= 1000) {
+      noInterrupts();
+      unsigned long count = interrupt_count;
+      interrupt_count = 0;
+      interrupts();
+
+      float frequency = count / ((current_time - last_time) / 1000.0);
+      DEBUGL("Interrupt Frequency: ");
+      DEBUG(frequency);
+      DEBUGLN(" Hz");
+
+      last_time = current_time;
+    }
+  } else {
     interrupt_count = 0;
-    interrupts();
-
-    float frequency = count / ((currentTime - lastTime) / 1000.0);
-    DEBUGL("Interrupt Frequency: ");
-    DEBUG(frequency);
-    DEBUGLN(" Hz");
-
-    lastTime = currentTime;
   }
 }
