@@ -6,7 +6,6 @@
 #include "recvr.h"
 
 mpu_t mpu;
-esc_t esc;
 recvr_t recvr;
 unsigned long last_time = 0;
 

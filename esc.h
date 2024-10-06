@@ -26,6 +26,8 @@ typedef struct {
   uint8_t motor_enable_mask = ESC_ALL_MOTORS_DISABLED;
 } esc_t;
 
+esc_t esc;
+
 volatile unsigned long interrupt_count = 0;
 
 const uint8_t motor_pins[4] = {ESC_MOTOR_PIN1, ESC_MOTOR_PIN2, ESC_MOTOR_PIN3, ESC_MOTOR_PIN4};
@@ -169,17 +171,23 @@ void old_shit() {
 ISR(TIMER1_COMPA_vect) {
   static uint8_t counter = 0;
 
+  if (esc.state == ESC_STATE_NOT_ARMED) return;
+
   // Start of cycle: set all pins high
   if (counter == 0) {
     for (int i = 0; i < 4; i++) {
-      digitalWrite(motor_pins[i], HIGH);
+      if (esc_motor_state(&esc, i)) {
+        digitalWrite(motor_pins[i], HIGH);
+      }
     }
   }
 
   // Check and set pins low as needed
   for (int i = 0; i < 4; i++) {
     if (counter >= motor_pulses[i]) {
-      digitalWrite(motor_pins[i], LOW);
+      if (esc_motor_state(&esc, i)) {
+        digitalWrite(motor_pins[i], LOW);
+      }
     }
   }
 
