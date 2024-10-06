@@ -42,12 +42,12 @@ static inline void handle_command(cmd_t cmd) {
     case CMD_MOTOR_ENABLE:
       esc_enable_motor(&esc, cmd.motor_idx);
       INFOL("Enabled motor ");
-      INFOLN(cmd.motor_idx);
+      INFOLN(cmd.motor_idx + 1);
       break;
     case CMD_MOTOR_DISABLE:
       esc_disable_motor(&esc, cmd.motor_idx);
       INFOL("Disabled motor ");
-      INFOLN(cmd.motor_idx);
+      INFOLN(cmd.motor_idx + 1);
       break;
     case CMD_MOTOR_SPEED:
       esc_set_all_motor_speed_pc(&esc, cmd.motor_speed / 100.0);
