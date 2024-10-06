@@ -168,7 +168,7 @@ void old_shit() {
 }
 
 ISR(TIMER1_COMPA_vect) {
-  static uint8_t counter = 0;
+  static uint16_t counter = 0;
 
   if (esc.state == ESC_STATE_NOT_ARMED) return;
 
@@ -192,7 +192,7 @@ ISR(TIMER1_COMPA_vect) {
 
   // Increment counter and reset at end of cycle
   counter++;
-  if (counter >= ESC_MAX_SPEED_US) counter = 0;
+  if (counter >= ((ESC_MAX_SPEED_US) / 2) + 20) counter = 0;
   interrupt_count++;
 }
 
@@ -207,7 +207,7 @@ void esc_setup(esc_t* esc) {
   TCCR1A = 0;
   TCCR1B = 0;
   TCNT1 = 0;
-  OCR1A = 15; // Set compare match for 4kHz frequency (250µs period)
+  OCR1A = 30; // Set compare match for 4kHz frequency (250µs period)
   TCCR1B |= (1 << WGM12); // CTC mode
   TCCR1B |= (1 << CS11);  // No prescaling
   TIMSK1 |= (1 << OCIE1A); // Enable Timer1 compare match A interrupt
