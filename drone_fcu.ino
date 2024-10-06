@@ -8,6 +8,8 @@
 mpu_t mpu;
 esc_t esc;
 recvr_t recvr;
+unsigned long lastTime = 0;
+unsigned long currentTime = 0;
 
 static inline void handle_command(cmd_t cmd) {
   switch (cmd.cmd) {
@@ -33,21 +35,32 @@ static inline void handle_command(cmd_t cmd) {
       break;
     case CMD_MOTOR_ENABLE_ALL:
       esc_enable_motors(&esc);
+      INFOLLN("Enabled all motors");
       break;
     case CMD_MOTOR_DISABLE_ALL:
       esc_disable_motors(&esc);
+      INFOLLN("Disabled all motors");
       break;
     case CMD_MOTOR_ENABLE:
       esc_enable_motor(&esc, cmd.motor_idx);
+      INFOL("Enabled motor ");
+      INFOLN(cmd.motor_idx);
       break;
     case CMD_MOTOR_DISABLE:
       esc_disable_motor(&esc, cmd.motor_idx);
+      INFOL("Disabled motor ");
+      INFOLN(cmd.motor_idx);
       break;
     case CMD_MOTOR_SPEED:
       esc_set_all_motor_speed_pc(&esc, cmd.motor_speed / 100.0);
+      INFOL("Set motor speed to ");
+      INFO(cmd.motor_speed);
+      INFOLN("%");
       break;
     case CMD_MOTOR_TEST:
+      INFOLLN("Testing motors");
       esc_test_motors(&esc);
+      INFOLLN("Finished testing motors");
       break;
   }
 }
@@ -65,10 +78,8 @@ static inline void debug_components() {
 void setup() {
   serial_setup();
   mpu_setup(&mpu);
-  mpu_debug_enable(&mpu);
   esc_setup(&esc);
   recvr_setup(&recvr);
-  recvr_debug_enable(&recvr);
   esc_enable_motors(&esc);
 }
 
@@ -83,4 +94,19 @@ void loop() {
 
   // Debug the information of components to serial
   debug_components();
+  // Measure and print the actual interrupt frequency every second
+  currentTime = millis();
+  if (currentTime - lastTime >= 1000) {
+    noInterrupts();
+    unsigned long count = interrupt_count;
+    interrupt_count = 0;
+    interrupts();
+
+    float frequency = count / ((currentTime - lastTime) / 1000.0);
+    DEBUGL("Interrupt Frequency: ");
+    DEBUG(frequency);
+    DEBUGLN(" Hz");
+
+    lastTime = currentTime;
+  }
 }

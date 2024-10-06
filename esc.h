@@ -26,6 +26,13 @@ typedef struct {
   uint8_t motor_enable_mask = ESC_ALL_MOTORS_DISABLED;
 } esc_t;
 
+volatile unsigned long interrupt_count = 0;
+
+const uint8_t motor_pins[4] = {ESC_MOTOR_PIN1, ESC_MOTOR_PIN2, ESC_MOTOR_PIN3, ESC_MOTOR_PIN4};
+
+// Motor pulse widths (in timer ticks, 125-250 for 125-250µs at 4kHz)
+volatile uint8_t motor_pulses[4] = {ESC_IDLE_SPEED_US, ESC_IDLE_SPEED_US, ESC_IDLE_SPEED_US, ESC_IDLE_SPEED_US};
+
 // Sets up the ESC. ESC uses Timer 1 and 2 and associated pins that produce PWM output.
 void esc_setup(esc_t* esc);
 // Enables all motors for arming and usage
@@ -101,33 +108,16 @@ static void set_motor_speed_us(uint8_t motor_idx, uint16_t speed_us) {
 
   DEBUGL("Setting ESC speed to ");
   DEBUG(speed_us_to_speed_pc(speed_us) * 100.0);
-  DEBUG("%% (");
+  DEBUG("% (");
   DEBUG(speed_us);
   DEBUG(" us) for motor ");
   DEBUGB(motor_idx, DEC);
   DEBUG(" on pin ");
   DEBUGBLN(pin, DEC);
 
-  long speed = map(speed_us, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US, 0, 255);
+  long speed = constrain(speed_us, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US);
 
-  switch(pin) {
-    case ESC_MOTOR_PIN1:
-      OCR1A = speed;
-      break;
-    case ESC_MOTOR_PIN2:
-      OCR1B = speed;
-      break;
-    case ESC_MOTOR_PIN3:
-      OCR2B = speed;
-      break;
-    case ESC_MOTOR_PIN4:
-      OCR2A = speed;
-      break;
-  }
-  // The PWM pin accepts values 0..255 which maps to the % of duty cycle
-  // For example the value 200 maps to (200/255)*100 =~ 78% duty cycle =~ 78% max speed
-  // const long pwm_value = map(speed_us, ESC_IDLE_SPEED_US, ESC_MAX_SPEED_US, 0, 255);
-  // analogWrite(pin, pwm_value);
+  motor_pulses[motor_idx] = speed;
 }
 
 static inline void set_motor_speed_pc(uint8_t motor_idx, float speed_pc) {
@@ -176,7 +166,48 @@ void old_shit() {
   TCCR2A |= (1 << COM2A1) | (1 << COM2B1);
 }
 
+ISR(TIMER1_COMPA_vect) {
+  static uint8_t counter = 0;
+
+  // Start of cycle: set all pins high
+  if (counter == 0) {
+    for (int i = 0; i < 4; i++) {
+      digitalWrite(motor_pins[i], HIGH);
+    }
+  }
+
+  // Check and set pins low as needed
+  for (int i = 0; i < 4; i++) {
+    if (counter >= motor_pulses[i]) {
+      digitalWrite(motor_pins[i], LOW);
+    }
+  }
+
+  // Increment counter and reset at end of cycle
+  counter++;
+  if (counter >= ESC_MAX_SPEED_US) counter = 0;
+  interrupt_count++;
+}
+
 void esc_setup(esc_t* esc) {
+  pinMode((uint8_t)ESC_MOTOR_PIN1, OUTPUT);
+  pinMode((uint8_t)ESC_MOTOR_PIN2, OUTPUT);
+  pinMode((uint8_t)ESC_MOTOR_PIN3, OUTPUT);
+  pinMode((uint8_t)ESC_MOTOR_PIN4, OUTPUT);
+
+  // Configure Timer1 (16-bit timer)
+  noInterrupts();
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1 = 0;
+  OCR1A = 4999; // Set compare match for 4kHz frequency (250µs period)
+  TCCR1B |= (1 << WGM12); // CTC mode
+  TCCR1B |= (1 << CS10);  // No prescaling
+  TIMSK1 |= (1 << OCIE1A); // Enable Timer1 compare match A interrupt
+  interrupts();
+}
+
+void esc_setup_v2(esc_t* esc) {
   pinMode((uint8_t)ESC_MOTOR_PIN1, OUTPUT);
   pinMode((uint8_t)ESC_MOTOR_PIN2, OUTPUT);
   pinMode((uint8_t)ESC_MOTOR_PIN3, OUTPUT);
@@ -293,7 +324,7 @@ void esc_arm(esc_t* esc) {
 void esc_test_motors(esc_t* esc) {
   const uint8_t max_pc = 30;
 
-  for (int i = 0; i < max_pc; i++) {
+  for (int i = 0; i <= max_pc; i++) {
     esc_set_all_motor_speed_pc(esc, i / 100.0);
     delay(20);
   }
