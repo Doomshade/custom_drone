@@ -291,7 +291,7 @@ void esc_disable_motor(esc_t* esc, uint8_t motor_idx) {
   if (motor_idx >= ESC_MOTOR_COUNT) return;
 
   esc_set_motor_speed_pc(esc, motor_idx, 0.0);
-  esc->motor_enable_mask |= (1 << motor_idx);
+  esc->motor_enable_mask &= ~(1 << motor_idx);
 }
 
 void esc_flip_usage_motor(esc_t* esc, uint8_t motor_idx) {
