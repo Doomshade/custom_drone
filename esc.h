@@ -208,7 +208,7 @@ void esc_setup(esc_t* esc) {
   TCCR1A = 0;
   TCCR1B = 0;
   TCNT1 = 0;
-  OCR1A = 4999; // Set compare match for 4kHz frequency (250µs period)
+  OCR1A = 3999; // Set compare match for 4kHz frequency (250µs period)
   TCCR1B |= (1 << WGM12); // CTC mode
   TCCR1B |= (1 << CS10);  // No prescaling
   TIMSK1 |= (1 << OCIE1A); // Enable Timer1 compare match A interrupt
