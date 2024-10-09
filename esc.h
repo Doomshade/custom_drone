@@ -167,36 +167,37 @@ void old_shit() {
   TCCR2A |= (1 << COM2A1) | (1 << COM2B1);
 }
 
-ISR(TIMER1_COMPA_vect) {
-  static uint16_t counter = 0;
+// ISR(TIMER1_COMPA_vect) {
+//   static uint16_t counter = 0;
+//
+//   if (esc.state == ESC_STATE_NOT_ARMED) return;
+//
+//   // Start of cycle: set all pins high
+//   if (counter == 0) {
+//     for (int i = 0; i < 4; i++) {
+//       if (esc_motor_state(&esc, i)) {
+//         digitalWrite(motor_pins[i], HIGH);
+//       }
+//     }
+//   }
+//
+//   // Check and set pins low as needed
+//   for (int i = 0; i < 4; i++) {
+//     if (counter >= motor_pulses[i]) {
+//       if (esc_motor_state(&esc, i)) {
+//         digitalWrite(motor_pins[i], LOW);
+//       }
+//     }
+//   }
+//
+//   // Increment counter and reset at end of cycle
+//   counter++;
+//   if (counter >= ((ESC_MAX_SPEED_US) / 2) + 20) counter = 0;
+//   interrupt_count++;
+// }
+//
 
-  if (esc.state == ESC_STATE_NOT_ARMED) return;
-
-  // Start of cycle: set all pins high
-  if (counter == 0) {
-    for (int i = 0; i < 4; i++) {
-      if (esc_motor_state(&esc, i)) {
-        digitalWrite(motor_pins[i], HIGH);
-      }
-    }
-  }
-
-  // Check and set pins low as needed
-  for (int i = 0; i < 4; i++) {
-    if (counter >= motor_pulses[i]) {
-      if (esc_motor_state(&esc, i)) {
-        digitalWrite(motor_pins[i], LOW);
-      }
-    }
-  }
-
-  // Increment counter and reset at end of cycle
-  counter++;
-  if (counter >= ((ESC_MAX_SPEED_US) / 2) + 20) counter = 0;
-  interrupt_count++;
-}
-
-void esc_setup(esc_t* esc) {
+void esc_setup_v3(esc_t* esc) {
   pinMode((uint8_t)ESC_MOTOR_PIN1, OUTPUT);
   pinMode((uint8_t)ESC_MOTOR_PIN2, OUTPUT);
   pinMode((uint8_t)ESC_MOTOR_PIN3, OUTPUT);
@@ -214,7 +215,7 @@ void esc_setup(esc_t* esc) {
   interrupts();
 }
 
-void esc_setup_v2(esc_t* esc) {
+void esc_setup(esc_t* esc) {
   pinMode((uint8_t)ESC_MOTOR_PIN1, OUTPUT);
   pinMode((uint8_t)ESC_MOTOR_PIN2, OUTPUT);
   pinMode((uint8_t)ESC_MOTOR_PIN3, OUTPUT);
@@ -229,17 +230,20 @@ void esc_setup_v2(esc_t* esc) {
   TCCR2B = 0;
   TCNT2 = 0;
 
-  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM11) | _BV(WGM10);
-  TCCR1B = _BV(WGM12) | _BV(CS11) | _BV(CS10);
-  ICR1 = 63;
+  TCCR1A = _BV(COM1A1) | _BV(COM1B1) | _BV(WGM11);
+  TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS10);
+  ICR1 = 3999;
 
+  // So because the OCR2A is used as both the "top value" and
+  // the value for the pin 11 we can't really use it to output
+  // PWM signals, meaning we are missing one PWM pin.
   TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+  TCCR2B = _BV(WGM22) | _BV(CS22);
+  OCR2A = 62;
 
-  OCR1A = 0;
-  OCR1B = 0;
-  OCR2A = 0;
-  OCR2B = 0;
+  OCR1A = 1999;
+  OCR1B = 1999;
+  OCR2B = 31;
 
   interrupts();
 
