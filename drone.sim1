@@ -1,0 +1,115 @@
+<circuit version="1.1.0-SR0" rev="1917" stepSize="1000000" stepsPS="10000" NLsteps="100000" reaStep="1000000" animate="1" >
+
+<item itemtype="Subcircuit" CircId="Nano-1" mainComp="false" Show_id="true" Show_Val="false" Pos="-220,-12" rotation="-810" hflip="-1" vflip="1" label="Arduino Nano" idLabPos="2.22213,-31.8513" labelrot="0" valLabPos="-16,20" valLabRot="0">
+<mainCompProps MainCompId="m328 TQFP-269" Frequency="16 MHz" Program="../../../Users/User/Documents/Arduino/drone_fcu/build/arduino.avr.nano/drone_fcu.ino.hex" Auto_Load="true" saveEepr="true" SerialMon="-1" />
+</item>
+
+<item itemtype="I2CRam" CircId="I2CRam-2" mainComp="false" Show_id="true" Show_Val="false" Pos="-244,-184" rotation="-450" hflip="1" vflip="1" label="MPU6050" idLabPos="-18.9767,-33.2007" labelrot="0" valLabPos="-16,20" valLabRot="0" Size_bytes="256 _bytes" Control_Code="104" Frequency="400 _kHz" Persistent="false" />
+
+<item itemtype="Potentiometer" CircId="Potentiometer-40" mainComp="false" ShowProp="Value_Ohm" Show_id="true" Show_Val="true" Pos="-640,-152" rotation="0" hflip="1" vflip="1" label="Throttle" idLabPos="-16,-40" labelrot="0" valLabPos="-10.2945,-28.5331" valLabRot="0" Resistance="2 kΩ" Value_Ohm="980 Ω" Slider="true" Scale="2" />
+
+<item itemtype="Potentiometer" CircId="Potentiometer-41" mainComp="false" ShowProp="Value_Ohm" Show_id="true" Show_Val="true" Pos="-520,-152" rotation="0" hflip="1" vflip="1" label="Yaw" idLabPos="-16,-40" labelrot="0" valLabPos="-10.2945,-28.5331" valLabRot="0" Resistance="2 kΩ" Value_Ohm="1118 Ω" Slider="true" Scale="2" />
+
+<item itemtype="Potentiometer" CircId="Potentiometer-42" mainComp="false" ShowProp="Value_Ohm" Show_id="true" Show_Val="true" Pos="-644,-80" rotation="0" hflip="1" vflip="1" label="Pitch" idLabPos="-16,-40" labelrot="0" valLabPos="-10.2945,-28.5331" valLabRot="0" Resistance="2 kΩ" Value_Ohm="1098 Ω" Slider="true" Scale="2" />
+
+<item itemtype="Potentiometer" CircId="Potentiometer-43" mainComp="false" ShowProp="Value_Ohm" Show_id="true" Show_Val="true" Pos="-524,-80" rotation="0" hflip="1" vflip="1" label="Roll" idLabPos="-16,-40" labelrot="0" valLabPos="-10.2945,-28.5331" valLabRot="0" Resistance="2 kΩ" Value_Ohm="1098 Ω" Slider="true" Scale="2" />
+
+<item itemtype="Voltage Source" CircId="Voltage Source-52" mainComp="false" ShowProp="MaxValue" Show_id="false" Show_Val="true" Pos="-656,-272" rotation="0" hflip="1" vflip="1" label="Voltage Source-52" idLabPos="-32,-48" labelrot="0" valLabPos="-8,30" valLabRot="0" Running="true" Value_Volt="5 V" MaxValue="5 V" MinValue="5 V" />
+
+<item itemtype="Voltage Source" CircId="Voltage Source-53" mainComp="false" ShowProp="MaxValue" Show_id="false" Show_Val="true" Pos="-600,-272" rotation="0" hflip="1" vflip="1" label="Voltage Source-53" idLabPos="-32,-48" labelrot="0" valLabPos="-8,30" valLabRot="0" Running="true" Value_Volt="5 V" MaxValue="5 V" MinValue="5 V" />
+
+<item itemtype="Voltage Source" CircId="Voltage Source-54" mainComp="false" ShowProp="MaxValue" Show_id="false" Show_Val="true" Pos="-528,-272" rotation="0" hflip="1" vflip="1" label="Voltage Source-54" idLabPos="-32,-48" labelrot="0" valLabPos="-8,30" valLabRot="0" Running="true" Value_Volt="5 V" MaxValue="5 V" MinValue="5 V" />
+
+<item itemtype="Voltage Source" CircId="Voltage Source-57" mainComp="false" ShowProp="MaxValue" Show_id="false" Show_Val="true" Pos="-468,-272" rotation="0" hflip="1" vflip="1" label="Voltage Source-57" idLabPos="-32,-48" labelrot="0" valLabPos="-8,30" valLabRot="0" Running="true" Value_Volt="5 V" MaxValue="5 V" MinValue="5 V" />
+
+<item itemtype="Ground" CircId="Ground-58" mainComp="false" Show_id="false" Show_Val="false" Pos="-672,-64" rotation="0" hflip="1" vflip="1" label="Ground-58" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Ground" CircId="Ground-60" mainComp="false" Show_id="false" Show_Val="false" Pos="-668,-136" rotation="0" hflip="1" vflip="1" label="Ground-60" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Ground" CircId="Ground-62" mainComp="false" Show_id="false" Show_Val="false" Pos="-548,-64" rotation="0" hflip="1" vflip="1" label="Ground-62" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Ground" CircId="Ground-65" mainComp="false" Show_id="false" Show_Val="false" Pos="-548,-136" rotation="0" hflip="1" vflip="1" label="Ground-65" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Subcircuit" CircId="Real_Button-68" mainComp="false" Show_id="true" Show_Val="false" Pos="-448,-320" rotation="90" hflip="1" vflip="1" label="Arm" idLabPos="4.92669,-16.1105" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Rectangle" CircId="Rectangle-71" mainComp="false" Show_id="true" Show_Val="false" Pos="-556,-188" rotation="0" hflip="1" vflip="1" label="RX" idLabPos="-10.6386,-170.546" labelrot="0" valLabPos="-16,20" valLabRot="0" H_size="300 _px" V_size="300 _px" Border="2 _px" Z_Value="-1" Color="#c5c5c5" Opacity="0.5" />
+
+<item itemtype="DcMotor" CircId="DcMotor-76" mainComp="false" Show_id="true" Show_Val="false" Pos="-452,276" rotation="0" hflip="1" vflip="1" label="Motor 1" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="6000 _RPM" Volt_Nominal="16.8 V" Resistance="100 mΩ" />
+
+<item itemtype="DcMotor" CircId="DcMotor-77" mainComp="false" Show_id="true" Show_Val="false" Pos="-452,396" rotation="0" hflip="-1" vflip="1" label="Motor 2" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="6000 _RPM" Volt_Nominal="16.8 V" Resistance="100 mΩ" />
+
+<item itemtype="DcMotor" CircId="DcMotor-78" mainComp="false" Show_id="true" Show_Val="false" Pos="-332,276" rotation="-360" hflip="1" vflip="1" label="Motor 3" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="6000 _RPM" Volt_Nominal="16.8 V" Resistance="100 mΩ" />
+
+<item itemtype="DcMotor" CircId="DcMotor-79" mainComp="false" Show_id="true" Show_Val="false" Pos="-332,396" rotation="0" hflip="-1" vflip="1" label="Motor 4" idLabPos="-22,-48" labelrot="0" valLabPos="-14,36" valLabRot="0" RPM_Nominal="6000 _RPM" Volt_Nominal="16.8 V" Resistance="100 mΩ" />
+
+<item itemtype="SerialTerm" CircId="SerialTerm-81" mainComp="false" Show_id="false" Show_Val="false" Pos="-60,120" rotation="-360" hflip="1" vflip="-1" label="SerialTerm-81" idLabPos="-20,-32" labelrot="0" valLabPos="-16,20" valLabRot="0" Baudrate="115200 _Bd" DataBits="8 _bits" StopBits="1 _bits" SerialMon="true" />
+
+<item itemtype="Oscope" CircId="Oscope-82" mainComp="false" Show_id="false" Show_Val="false" Pos="-80,216" rotation="0" hflip="1" vflip="1" label="Oscope-82" idLabPos="-90,-100" labelrot="0" valLabPos="-16,20" valLabRot="0" Basic_X="135 _px" Basic_Y="135 _px" BufferSize="60000" connectGnd="true" InputImped="10 kΩ" TimDiv="50000000" TimPos="335052886,335052886,335052886,0," VolDiv="0.498008,0.498008,0.498008,0.498008," Tunnels=",,,," Trigger="0" Filter="0.1 V" Trigger="0" AutoSC="3" Tracks="4" HideCh="false,false,false,false," VolPos="-2.49004,-2.49004,-2.49004,-2.49004," />
+
+<item itemtype="Node" CircId="Node-84" mainComp="false" Pos="-296,148" />
+
+<item itemtype="Node" CircId="Node-85" mainComp="false" Pos="-288,232" />
+
+<item itemtype="Node" CircId="Node-86" mainComp="false" Pos="-280,264" />
+
+<item itemtype="Node" CircId="Node-87" mainComp="false" Pos="-228,144" />
+
+<item itemtype="Connector" uid="Connector-56" startpinid="I2CRam-2-in0" endpinid="Nano-1-A4" pointList="-252,-160,-252,40,-248,40" />
+
+<item itemtype="Connector" uid="Connector-58" startpinid="I2CRam-2-in1" endpinid="Nano-1-A5" pointList="-236,-160,-236,40,-240,40" />
+
+<item itemtype="Connector" uid="Connector-84" startpinid="Potentiometer-43-PinM" endpinid="Nano-1-A3" pointList="-524,-64,-256,-64,-256,40" />
+
+<item itemtype="Connector" uid="Connector-90" startpinid="Potentiometer-40-PinM" endpinid="Nano-1-A0" pointList="-640,-136,-640,-132,-280,-132,-280,40" />
+
+<item itemtype="Connector" uid="Connector-106" startpinid="Voltage Source-53-outPin" endpinid="Potentiometer-42-PinB" pointList="-572,-256,-572,-80,-628,-80" />
+
+<item itemtype="Connector" uid="Connector-107" startpinid="Voltage Source-54-outPin" endpinid="Potentiometer-41-PinB" pointList="-500,-256,-500,-152,-504,-152" />
+
+<item itemtype="Connector" uid="Connector-111" startpinid="Voltage Source-52-outPin" endpinid="Potentiometer-40-PinB" pointList="-628,-256,-628,-152,-624,-152" />
+
+<item itemtype="Connector" uid="Connector-113" startpinid="Voltage Source-57-outPin" endpinid="Potentiometer-43-PinB" pointList="-440,-256,-440,-80,-508,-80" />
+
+<item itemtype="Connector" uid="Connector-114" startpinid="Potentiometer-42-PinM" endpinid="Nano-1-A2" pointList="-644,-64,-644,-60,-264,-60,-264,40" />
+
+<item itemtype="Connector" uid="Connector-119" startpinid="Potentiometer-42-PinA" endpinid="Ground-58-Gnd" pointList="-660,-80,-672,-80" />
+
+<item itemtype="Connector" uid="Connector-120" startpinid="Potentiometer-40-PinA" endpinid="Ground-60-Gnd" pointList="-656,-152,-668,-152" />
+
+<item itemtype="Connector" uid="Connector-122" startpinid="Potentiometer-43-PinA" endpinid="Ground-62-Gnd" pointList="-540,-80,-548,-80" />
+
+<item itemtype="Connector" uid="Connector-128" startpinid="Potentiometer-41-PinA" endpinid="Ground-65-Gnd" pointList="-536,-152,-548,-152" />
+
+<item itemtype="Connector" uid="Connector-129" startpinid="Potentiometer-41-PinM" endpinid="Nano-1-A1" pointList="-520,-136,-332,-136,-332,40,-272,40" />
+
+<item itemtype="Connector" uid="Connector-144" startpinid="Real_Button-68-Q" endpinid="Nano-1-A7" pointList="-428,-284,-428,-72,-224,-72,-224,40" />
+
+<item itemtype="Connector" uid="Connector-150" startpinid="SerialTerm-81-pin0" endpinid="Nano-1-0" pointList="-84,128,-200,128,-200,88" />
+
+<item itemtype="Connector" uid="Connector-159" startpinid="Node-84-1" endpinid="Oscope-82-Pin1" pointList="-296,148,-220,148,-220,200,-168,200" />
+
+<item itemtype="Connector" uid="Connector-160" startpinid="Nano-1-11" endpinid="Node-84-0" pointList="-296,88,-296,148" />
+
+<item itemtype="Connector" uid="Connector-161" startpinid="Node-84-2" endpinid="DcMotor-77-rPin" pointList="-296,148,-460,148,-460,396,-492,396" />
+
+<item itemtype="Connector" uid="Connector-162" startpinid="Node-85-1" endpinid="Oscope-82-Pin2" pointList="-288,232,-168,232" />
+
+<item itemtype="Connector" uid="Connector-163" startpinid="Nano-1-10" endpinid="Node-85-0" pointList="-288,88,-288,232" />
+
+<item itemtype="Connector" uid="Connector-164" startpinid="Node-85-2" endpinid="DcMotor-78-rPin" pointList="-288,232,-288,276,-292,276" />
+
+<item itemtype="Connector" uid="Connector-165" startpinid="Node-86-1" endpinid="Oscope-82-Pin3" pointList="-280,264,-168,264" />
+
+<item itemtype="Connector" uid="Connector-166" startpinid="Nano-1-9" endpinid="Node-86-0" pointList="-280,88,-280,264" />
+
+<item itemtype="Connector" uid="Connector-149" startpinid="SerialTerm-81-pin1" endpinid="Nano-1-1" pointList="-84,112,-192,112,-192,88" />
+
+<item itemtype="Connector" uid="Connector-179" startpinid="Node-86-2" endpinid="DcMotor-79-lPin" pointList="-280,264,-280,396,-292,396" />
+
+<item itemtype="Connector" uid="Connector-180" startpinid="Nano-1-3" endpinid="Node-87-1" pointList="-232,88,-232,144,-228,144" />
+
+<item itemtype="Connector" uid="Connector-182" startpinid="Node-87-2" endpinid="Oscope-82-Pin0" pointList="-228,144,-168,144,-168,168" />
+
+<item itemtype="Connector" uid="Connector-183" startpinid="Node-87-0" endpinid="DcMotor-76-lPin" pointList="-228,144,-492,144,-492,276" />
+
+</circuit>
